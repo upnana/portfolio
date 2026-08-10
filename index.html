@@ -558,12 +558,22 @@
         <video controls preload="metadata" src="media/eval_pass_tape.mp4"></video>
         <div class="cap"><b>🤝 双臂交接双面胶（pass）</b><span>抓取 → 递臂 → 放黄盘，ckpt 060000 真机评测。</span></div>
       </div>
+    </div>
+    <h3 style="margin:24px 0 6px;color:#1e40af">📈 Evo-RL Value overlay 对比（准确 vs 假进度）</h3>
+    <p style="font-size:13.5px;color:#3d4a63;margin:0 0 8px">V(s) 曲线与真机 rollout 视频对齐，验证价值函数是否准确反映任务进度：</p>
+    <div class="vids">
       <div class="vid reveal">
         <div class="play">▶</div>
         <video controls preload="metadata" src="media/value_overlay_v3_100k_with_tag.mp4"></video>
-        <div class="cap"><b>📈 Evo-RL Value overlay 诊断</b><span>V(s) 曲线与真机视频对齐，验证价值函数是否准确反映任务进度。</span></div>
+        <div class="cap"><b>例 1 · v3 100k with tag —— 大体准确</b><span>value mean ≈ -0.16，末段 V 从 -0.39 升至 -0.09；蓝色纸巾确实进入黄盘，V 抬升与可见进度一致（口红仍在桌上、V 偏高，仍残留一定乐观）。</span></div>
+      </div>
+      <div class="vid reveal">
+        <div class="play">▶</div>
+        <video controls preload="metadata" src="media/value_overlay_v2_120k_with_tag.mp4"></video>
+        <div class="cap"><b>例 2 · v2 120k with tag —— 假进度（不准确）</b><span>value mean ≈ -0.37，末段 V 从 -0.38 抬升到 -0.22，但人眼真值：黄盘空、口红/纸巾均未完成 → V 对 grasp / 完成状态不敏感，计算偏乐观。</span></div>
       </div>
     </div>
+    <p class="note" style="margin-top:10px">判断方法：视频时间轴、V(t)、夹爪开合、‖a−s‖ 与人工标注的子任务成败四路对齐；曲线好看 ≠ 任务完成。</p>
     <h3 style="margin:24px 0 6px;color:#1e40af">🤗 Hugging Face · realrobot-experiments 真机评测视频</h3>
     <p style="font-size:13.5px;color:#3d4a63;margin:0 0 8px">多模型（SmolVLA / π0.5 / ACT / GR00T）× SO101 真机评测，覆盖成功案例与鲁棒性实验：</p>
     <div class="tags" style="margin-bottom:12px">
