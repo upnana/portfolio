@@ -183,6 +183,7 @@
   .tag.g { background: #ecfdf5; color: #047857; border-color: #d1fae5; }
   .tag.o { background: #fffbeb; color: #b45309; border-color: #fef3c7; }
   .tag.c { background: #ecfeff; color: #0e7490; border-color: #cffafe; }
+  .tag a { color: inherit; }
 
   .feat { background: linear-gradient(180deg, #fbfdff, #fff); border-color: #cfe0ff; }
   .feat::after {
@@ -462,7 +463,7 @@
 
       <div class="panel reveal">
         <h3 style="margin-top:0">📊 数据集 · 36 个 / 2,843 episodes / 193.5 万帧</h3>
-        <p>全部真机遥操作 / HITL 采集，LeRobot 格式（30 FPS，关节位置控制），关键数据同步上传 Hugging Face（<code>my_bimanual/*</code>）。</p>
+        <p>全部真机遥操作 / HITL 采集，LeRobot 格式（30 FPS，关节位置控制）；13 个数据集同步上传 Hugging Face（<code>upna/*</code>）。</p>
         <table style="width:100%;border-collapse:collapse;font-size:12.5px">
           <tr style="color:var(--muted);text-align:left"><th style="padding:4px 8px;border-bottom:1px solid var(--line)">数据集</th><th style="padding:4px 8px;border-bottom:1px solid var(--line)">任务</th><th style="padding:4px 8px;border-bottom:1px solid var(--line);text-align:right">episodes</th><th style="padding:4px 8px;border-bottom:1px solid var(--line);text-align:right">frames</th></tr>
           <tr><td style="padding:4px 8px"><code>evo_rl_bowls_..._v3</code></td><td style="padding:4px 8px">叠碗+口红+纸巾（Evo-RL 最终）</td><td style="padding:4px 8px;text-align:right">287</td><td style="padding:4px 8px;text-align:right">262,484</td></tr>
@@ -500,7 +501,33 @@
             <div class="tags"><span class="tag o">groot_so101</span><span class="tag o">hilserl_pick_place</span><span class="tag o">hilserl_push_black_block</span><span class="tag o">reward_classifier ×2</span></div>
           </div>
         </div>
-        <p class="note" style="margin-top:14px">Hugging Face：<a href="https://huggingface.co/upna" target="_blank">huggingface.co/upna ↗</a>（数据集 <code>my_bimanual/*</code> 已上传）</p>
+        <div style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px">
+          <div style="font-size:13px;font-weight:700;color:#111a2e;margin-bottom:4px">🤗 Hugging Face · <a href="https://huggingface.co/upna" target="_blank">huggingface.co/upna ↗</a></div>
+          <div style="font-size:12.5px;color:var(--muted);margin-bottom:8px">4 个模型 · 13 个数据集（LeRobot 真机数据，全部可下载复现）</div>
+          <div style="font-size:12.5px;font-weight:600;color:#33415c;margin-bottom:5px">模型</div>
+          <div class="tags" style="margin-bottom:10px">
+            <span class="tag g"><a href="https://huggingface.co/upna/pi05_stack_white_blue_black" target="_blank">pi05_stack_white_blue_black</a></span>
+            <span class="tag g"><a href="https://huggingface.co/upna/pi0_stack_white_blue_black_040000" target="_blank">pi0_stack_..._040000</a></span>
+            <span class="tag g"><a href="https://huggingface.co/upna/pi0_stack_white_blue_black_3cam_060000" target="_blank">pi0_3cam_060000</a></span>
+            <span class="tag g"><a href="https://huggingface.co/upna/pi0_stack_white_blue_black_3cam_080000" target="_blank">pi0_3cam_080000</a></span>
+          </div>
+          <div style="font-size:12.5px;font-weight:600;color:#33415c;margin-bottom:5px">数据集</div>
+          <div class="tags">
+            <span class="tag b"><a href="https://huggingface.co/datasets/upna/bimanual_stack_bowls" target="_blank">bimanual_stack_bowls</a></span>
+            <span class="tag b"><a href="https://huggingface.co/datasets/upna/bimanual-pass-double-sided-tape-roll" target="_blank">bimanual-pass-tape</a></span>
+            <span class="tag b"><a href="https://huggingface.co/datasets/upna/stack_white_blue_black" target="_blank">stack_white_blue_black</a></span>
+            <span class="tag b"><a href="https://huggingface.co/datasets/upna/stack_3blocks_white_blue_black_3cam" target="_blank">stack_3blocks_3cam</a></span>
+            <span class="tag b"><a href="https://huggingface.co/datasets/upna/pickup_blue_block_into_the_yellow_tray" target="_blank">pickup_blue_block</a></span>
+            <span class="tag b"><a href="https://huggingface.co/datasets/upna/realrobot-experiments" target="_blank">realrobot-experiments</a></span>
+            <span class="tag b"><a href="https://huggingface.co/datasets/upna/evo_rl_snacks_tray_stack_bowls_plate" target="_blank">evo_rl_snacks_tray</a></span>
+            <span class="tag b"><a href="https://huggingface.co/datasets/upna/bimanual_handover" target="_blank">bimanual_handover</a></span>
+            <span class="tag b"><a href="https://huggingface.co/datasets/upna/realrobot-benchmark" target="_blank">realrobot-benchmark</a></span>
+            <span class="tag b"><a href="https://huggingface.co/datasets/upna/HIL-ENRL-experiment" target="_blank">HIL-ENRL-experiment</a></span>
+            <span class="tag b"><a href="https://huggingface.co/datasets/upna/garlic_data" target="_blank">garlic_data</a></span>
+            <span class="tag b"><a href="https://huggingface.co/datasets/upna/pick_single_snack_data" target="_blank">pick_single_snack</a></span>
+            <span class="tag b"><a href="https://huggingface.co/datasets/upna/collect_items" target="_blank">collect_items</a></span>
+          </div>
+        </div>
       </div>
 
     </div>
