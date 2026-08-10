@@ -564,7 +564,44 @@
         <div class="cap"><b>📈 Evo-RL Value overlay 诊断</b><span>V(s) 曲线与真机视频对齐，验证价值函数是否准确反映任务进度。</span></div>
       </div>
     </div>
-    <p class="note">视频为本地真机评测录屏；另有 <a href="https://upnana.github.io/smolvla_stack_blocks-white_blue_black/eval.html" target="_blank">叠方块网页版评测页</a> 可在线观看。</p>
+    <h3 style="margin:24px 0 6px;color:#1e40af">🤗 Hugging Face · realrobot-experiments 真机评测视频</h3>
+    <p style="font-size:13.5px;color:#3d4a63;margin:0 0 8px">多模型（SmolVLA / π0.5 / ACT / GR00T）× SO101 真机评测，覆盖成功案例与鲁棒性实验：</p>
+    <div class="tags" style="margin-bottom:12px">
+      <span class="tag g">成功案例</span>
+      <span class="tag o">背景迁移</span>
+      <span class="tag o">物体位姿泛化</span>
+      <span class="tag o">位置泛化</span>
+      <span class="tag o">语言不匹配</span>
+    </div>
+    <div class="vids">
+      <div class="vid">
+        <video controls preload="metadata" src="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/smoalvla_blue_block_pick_success.mp4"></video>
+        <div class="cap"><b>SmolVLA · 蓝块入黄盘（success）</b><span>89ep / 22epoch 模型，真机抓取成功。</span></div>
+      </div>
+      <div class="vid">
+        <video controls preload="metadata" src="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/pi05_50eposide_30%20epoch_front_view_task_pickup_white_block_into_yellow_tray.mp4"></video>
+        <div class="cap"><b>π0.5 · 白块入黄盘（前视）</b><span>50ep / 30epoch 模型，前视相机视角。</span></div>
+      </div>
+      <div class="vid">
+        <video controls preload="metadata" src="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/act_pickup_garlic_failure.mp4"></video>
+        <div class="cap"><b>ACT · 大蒜入容器（failure）</b><span>失败案例对照。</span></div>
+      </div>
+      <div class="vid">
+        <video controls preload="metadata" src="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/pi05_pickupitems_failure_case.mp4"></video>
+        <div class="cap"><b>π0.5 · 多物抓取（failure）</b><span>失败案例对照。</span></div>
+      </div>
+    </div>
+    <p class="note" style="margin-top:10px">完整 9 段视频（HF 镜像托管，原址 huggingface.co/datasets/upna/realrobot-experiments）：
+      <a href="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/act-pickup_snack_success.mp4" target="_blank">ACT 零食入碗(success)</a> ·
+      <a href="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/act_pickup_garlic_failure.mp4" target="_blank">ACT 大蒜(failure)</a> ·
+      <a href="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/pi05_50eposide_30%20epoch_front_view_task_pickup_white_block_into_yellow_tray.mp4" target="_blank">π0.5 白块(前视)</a> ·
+      <a href="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/pi05_50eposide_30%20epoch_wrist_view_task_pickup_white_block_into_yellow_tray.mp4" target="_blank">π0.5 白块(腕部)</a> ·
+      <a href="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/pi05_pickupitems_failure_case.mp4" target="_blank">π0.5 多物(failure)</a> ·
+      <a href="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/smoalvla_blue_block_pick_success.mp4" target="_blank">SmolVLA 蓝块(success)</a> ·
+      <a href="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/smolvla_50eposide_10%20epoch_task_pickup_white_block_into_yellow_tray.mp4" target="_blank">SmolVLA 白块</a> ·
+      <a href="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/smolvla_50eposide_10%20epoch_task_pickup_white_block_into_yellow_tray%281%29.mp4" target="_blank">SmolVLA 白块(2)</a> ·
+      <a href="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/smolvla_89episode_22epoch_pickup_blue_block_into_yellow_tray.mp4" target="_blank">SmolVLA 蓝块(89ep)</a></p>
+    <p class="note">本地录屏另有 <a href="https://upnana.github.io/smolvla_stack_blocks-white_blue_black/eval.html" target="_blank">叠方块网页版评测页</a> 可在线观看。</p>
   </section>
 
   <!-- ===== 技能 ===== -->
