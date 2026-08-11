@@ -328,13 +328,18 @@
     /* —— Insight strip —— */
     .insight {
       margin-top: 56px;
+      background: var(--bg-2);
+      padding: 22px;
+      display: grid;
+      gap: 28px;
+    }
+    .insight-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 18px;
-      background: var(--bg-2);
-      padding: 22px;
+      align-items: start;
     }
-    @media (max-width: 860px) { .insight { grid-template-columns: 1fr; } }
+    @media (max-width: 860px) { .insight-row { grid-template-columns: 1fr; } }
     .insight-copy {
       display: flex;
       flex-direction: column;
@@ -698,55 +703,57 @@
           </div>
         </article>
 
-        <div class="insight reveal" id="insight">
-          <div class="insight-copy">
-            <h3>Value overlay：准确 vs 假进度</h3>
-            <p>把 V(s) 曲线和真机画面对齐。曲线抬升 ≠ 任务完成——右边两例对照得很清楚。</p>
-            <p>方法：时间轴 · V(t) · 夹爪开合 · ‖a−s‖ · 人工子任务标注，四路一起看。</p>
+        <div class="insight reveal in" id="insight">
+          <div class="insight-row">
+            <div class="insight-copy">
+              <h3>Value overlay：准确 vs 假进度</h3>
+              <p>把 V(s) 曲线和真机画面对齐。曲线抬升 ≠ 任务完成——右边两例对照得很清楚。</p>
+              <p>方法：时间轴 · V(t) · 夹爪开合 · ‖a−s‖ · 人工子任务标注，四路一起看。</p>
+            </div>
+            <div class="insight-pair">
+              <figure class="compare ok">
+                <video controls playsinline preload="metadata"
+                  src="media/value_overlay_v3_100k_with_tag.mp4"></video>
+                <figcaption class="label">
+                  <b>v3 · 大体准确</b>
+                  <span>纸巾入盘时 V 抬升与可见进度一致</span>
+                </figcaption>
+              </figure>
+              <figure class="compare bad">
+                <video controls playsinline preload="metadata"
+                  src="media/value_overlay_v2_120k_with_tag.mp4"></video>
+                <figcaption class="label">
+                  <b>v2 · 假进度</b>
+                  <span>V 抬升，但黄盘空、任务未完成</span>
+                </figcaption>
+              </figure>
+            </div>
           </div>
-          <div class="insight-pair">
-            <figure class="compare ok">
-              <video controls playsinline preload="metadata"
-                src="media/value_overlay_v3_100k_with_tag.mp4"></video>
-              <figcaption class="label">
-                <b>v3 · 大体准确</b>
-                <span>纸巾入盘时 V 抬升与可见进度一致</span>
-              </figcaption>
-            </figure>
-            <figure class="compare bad">
-              <video controls playsinline preload="metadata"
-                src="media/value_overlay_v2_120k_with_tag.mp4"></video>
-              <figcaption class="label">
-                <b>v2 · 假进度</b>
-                <span>V 抬升，但黄盘空、任务未完成</span>
-              </figcaption>
-            </figure>
-          </div>
-        </div>
 
-        <div class="insight reveal" id="cosmos">
-          <div class="insight-copy">
-            <h3>Cosmos3-Edge · Vision SFT I2V</h3>
-            <p>cosmos-edge-lab · stack3cam_wam：Vision SFT 生成的 I2V 预览，held-out episode 与 pred/GT 并排对照。</p>
-            <p><a href="https://github.com/upnana/cosmos-edge-lab" target="_blank" rel="noopener">仓库 cosmos-edge-lab ↗</a></p>
-          </div>
-          <div class="insight-pair">
-            <figure class="compare">
-              <video controls playsinline preload="metadata"
-                src="media/cosmos_pred_i2v_heldout_ep111.mp4"></video>
-              <figcaption class="label">
-                <b>held-out · ep111</b>
-                <span>500 iter Vision SFT · I2V 预测</span>
-              </figcaption>
-            </figure>
-            <figure class="compare">
-              <video controls playsinline preload="metadata"
-                src="media/cosmos_pred_vs_gt_2s.mp4"></video>
-              <figcaption class="label">
-                <b>pred / GT</b>
-                <span>生成结果与真值并排</span>
-              </figcaption>
-            </figure>
+          <div class="insight-row" id="cosmos">
+            <div class="insight-copy">
+              <h3>Cosmos3-Edge · Vision SFT I2V</h3>
+              <p>cosmos-edge-lab · stack3cam_wam 生成视频：held-out ep111 的 I2V 预测，以及 pred/GT 并排对照。</p>
+              <p><a href="https://github.com/upnana/cosmos-edge-lab" target="_blank" rel="noopener">仓库 cosmos-edge-lab ↗</a></p>
+            </div>
+            <div class="insight-pair">
+              <figure class="compare">
+                <video controls playsinline preload="metadata"
+                  src="media/cosmos_i2v_heldout_ep111_vision.mp4"></video>
+                <figcaption class="label">
+                  <b>held-out · ep111</b>
+                  <span>Vision SFT 生成的 I2V（完整预览）</span>
+                </figcaption>
+              </figure>
+              <figure class="compare">
+                <video controls playsinline preload="metadata"
+                  src="media/cosmos_pred_vs_gt_2s.mp4"></video>
+                <figcaption class="label">
+                  <b>pred / GT</b>
+                  <span>生成结果与真值并排</span>
+                </figcaption>
+              </figure>
+            </div>
           </div>
         </div>
       </div>
