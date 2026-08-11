@@ -723,6 +723,32 @@
             </figure>
           </div>
         </div>
+
+        <div class="insight reveal" id="cosmos">
+          <div class="insight-copy">
+            <h3>Cosmos3-Edge · Vision SFT I2V</h3>
+            <p>cosmos-edge-lab · stack3cam_wam：Vision SFT 生成的 I2V 预览，held-out episode 与 pred/GT 并排对照。</p>
+            <p><a href="https://github.com/upnana/cosmos-edge-lab" target="_blank" rel="noopener">仓库 cosmos-edge-lab ↗</a></p>
+          </div>
+          <div class="insight-pair">
+            <figure class="compare">
+              <video controls playsinline preload="metadata"
+                src="media/cosmos_pred_i2v_heldout_ep111.mp4"></video>
+              <figcaption class="label">
+                <b>held-out · ep111</b>
+                <span>500 iter Vision SFT · I2V 预测</span>
+              </figcaption>
+            </figure>
+            <figure class="compare">
+              <video controls playsinline preload="metadata"
+                src="media/cosmos_pred_vs_gt_2s.mp4"></video>
+              <figcaption class="label">
+                <b>pred / GT</b>
+                <span>生成结果与真值并排</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -744,7 +770,7 @@
             <a class="name" href="https://github.com/upnana/cosmos-edge-lab" target="_blank" rel="noopener">Cosmos3-Edge · World-Action-Model</a>
             <div class="meta">1×H100</div>
             <div class="status">DONE</div>
-            <p class="blurb">stack3cam_wam：Vision SFT 已出 I2V（pred/GT）；Action-policy 与 Full SFT vs LoRA 分析齐全。</p>
+            <p class="blurb">stack3cam_wam：Vision SFT 已出 I2V（pred/GT）；Action-policy 与 Full SFT vs LoRA 分析齐全。<a href="#cosmos">看生成视频 ↓</a></p>
           </div>
           <div class="prow">
             <a class="name" href="https://github.com/upnana/smolvla_stack_blocks_white_blue_black_3cam" target="_blank" rel="noopener">stack_blocks · 3 相机版</a>
