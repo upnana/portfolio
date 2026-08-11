@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>0112 · Embodied AI / Robot Learning</title>
+  <meta name="description" content="0112 具身智能 / 机器人学习作品集：双臂 SO101 真机、VLA、Evo-RL / ACP、World-Action-Model。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=Syne:wght@600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0c0d10;
+      --bg-2: #14161c;
+      --ink: #f2efe8;
+      --muted: #9b968c;
+      --line: rgba(242, 239, 232, 0.12);
+      --accent: #e4a24a;
+      --accent-dim: rgba(228, 162, 74, 0.16);
+      --ok: #6fbf8a;
+      --bad: #d9896c;
+      --max: 1120px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Source Sans 3", "PingFang SC", "Noto Sans SC", sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    img, video { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    a:hover { color: var(--accent); }
+    button { font: inherit; }
+
+    .wrap {
+      width: min(100% - 40px, var(--max));
+      margin-inline: auto;
+    }
+
+    /* —— Nav —— */
+    .nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px;
+      mix-blend-mode: difference;
+      color: #fff;
+      pointer-events: none;
+    }
+    .nav a { pointer-events: auto; }
+    .nav-brand {
+      font-family: Syne, sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      font-size: 14px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .nav-links a { opacity: 0.85; }
+    .nav-links a:hover { opacity: 1; color: #fff; }
+
+    /* —— Hero —— */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      color: var(--ink);
+    }
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .hero-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.04);
+      animation: heroZoom 14s var(--ease) both;
+    }
+    @keyframes heroZoom {
+      from { transform: scale(1.12); filter: brightness(0.55); }
+      to { transform: scale(1.04); filter: brightness(0.72); }
+    }
+    .hero-shade {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(180deg, rgba(12,13,16,0.35) 0%, rgba(12,13,16,0.15) 35%, rgba(12,13,16,0.88) 78%, var(--bg) 100%),
+        radial-gradient(80% 50% at 70% 40%, transparent 0%, rgba(12,13,16,0.45) 100%);
+      pointer-events: none;
+    }
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      padding: 0 0 64px;
+      width: min(100% - 40px, var(--max));
+      margin-inline: auto;
+      animation: rise 0.9s 0.15s var(--ease) both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: none; }
+    }
+    .brand {
+      font-family: Syne, sans-serif;
+      font-weight: 800;
+      font-size: clamp(64px, 14vw, 132px);
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+      margin: 0 0 18px;
+    }
+    .brand span {
+      display: block;
+      font-size: clamp(14px, 2vw, 18px);
+      letter-spacing: 0.28em;
+      font-weight: 600;
+      opacity: 0.72;
+      margin-top: 14px;
+      text-transform: uppercase;
+    }
+    .hero h1 {
+      font-family: "Noto Serif SC", serif;
+      font-weight: 700;
+      font-size: clamp(22px, 3.4vw, 34px);
+      line-height: 1.35;
+      margin: 0 0 12px;
+      max-width: 18em;
+    }
+    .hero-lead {
+      margin: 0 0 28px;
+      max-width: 34em;
+      color: rgba(242, 239, 232, 0.78);
+      font-size: clamp(15px, 1.6vw, 17px);
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      border: 1px solid transparent;
+      transition: transform 0.25s var(--ease), background 0.25s, border-color 0.25s, color 0.25s;
+    }
+    .btn:hover { transform: translateY(-2px); color: inherit; }
+    .btn-primary {
+      background: var(--accent);
+      color: #1a1208;
+    }
+    .btn-primary:hover { background: #efb45c; color: #1a1208; }
+    .btn-ghost {
+      border-color: rgba(242, 239, 232, 0.35);
+      background: rgba(12, 13, 16, 0.35);
+      backdrop-filter: blur(8px);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* —— Sections —— */
+    section {
+      padding: 88px 0 24px;
+      scroll-margin-top: 24px;
+    }
+    .sec-kicker {
+      font-family: Syne, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 10px;
+    }
+    .sec-title {
+      font-family: "Noto Serif SC", serif;
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 700;
+      line-height: 1.25;
+      margin: 0 0 12px;
+    }
+    .sec-desc {
+      margin: 0 0 40px;
+      max-width: 40em;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* —— Proof / demos —— */
+    .proof-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 18px;
+    }
+    @media (max-width: 860px) {
+      .proof-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+    .shot {
+      position: relative;
+      background: #000;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .shot video {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      opacity: 0.92;
+    }
+    .shot figcaption {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 48px 18px 16px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.85));
+      font-size: 14px;
+    }
+    .shot figcaption strong {
+      display: block;
+      font-family: "Noto Serif SC", serif;
+      font-size: 17px;
+      margin-bottom: 4px;
+    }
+    .shot figcaption span { color: rgba(242,239,232,0.72); font-size: 13px; }
+    .shot-stack { display: grid; gap: 18px; }
+
+    /* —— Featured results —— */
+    .feature {
+      display: grid;
+      grid-template-columns: 140px 1fr auto;
+      gap: 20px 28px;
+      align-items: start;
+      padding: 28px 0;
+      border-top: 1px solid var(--line);
+    }
+    .feature:last-child { border-bottom: 1px solid var(--line); }
+    .feature-idx {
+      font-family: Syne, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      padding-top: 8px;
+    }
+    .feature h3 {
+      font-family: "Noto Serif SC", serif;
+      font-size: clamp(20px, 2.4vw, 26px);
+      margin: 0 0 8px;
+      font-weight: 700;
+    }
+    .feature h3 a:hover { color: var(--accent); }
+    .feature .one-liner {
+      margin: 0 0 10px;
+      color: var(--muted);
+      max-width: 46em;
+    }
+    .feature .result {
+      margin: 0;
+      color: var(--ink);
+      font-weight: 600;
+      max-width: 46em;
+    }
+    .feature .result em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .feature-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-end;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      padding-top: 8px;
+    }
+    .feature-links a {
+      border-bottom: 1px solid transparent;
+      padding-bottom: 1px;
+    }
+    .feature-links a:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    @media (max-width: 720px) {
+      .feature {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .feature-links {
+        align-items: flex-start;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+    }
+
+    /* —— Insight strip —— */
+    .insight {
+      margin-top: 56px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      background: var(--bg-2);
+      padding: 22px;
+    }
+    @media (max-width: 860px) { .insight { grid-template-columns: 1fr; } }
+    .insight-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 12px 8px;
+    }
+    .insight-copy h3 {
+      font-family: "Noto Serif SC", serif;
+      font-size: 24px;
+      margin: 0 0 12px;
+    }
+    .insight-copy p {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .insight-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 560px) { .insight-pair { grid-template-columns: 1fr; } }
+    .compare {
+      background: #000;
+      overflow: hidden;
+    }
+    .compare video {
+      width: 100%;
+      aspect-ratio: 16 / 11;
+      object-fit: cover;
+    }
+    .compare .label {
+      padding: 10px 12px 12px;
+      font-size: 12.5px;
+      border-top: 1px solid var(--line);
+      background: var(--bg);
+    }
+    .compare .label b { display: block; margin-bottom: 2px; }
+    .compare.ok .label b { color: var(--ok); }
+    .compare.bad .label b { color: var(--bad); }
+    .compare .label span { color: var(--muted); }
+
+    /* —— Project list —— */
+    .plist { border-top: 1px solid var(--line); }
+    .prow {
+      display: grid;
+      grid-template-columns: 1fr 180px 90px;
+      gap: 16px;
+      align-items: baseline;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+      transition: background 0.2s;
+    }
+    .prow:hover { background: rgba(228, 162, 74, 0.04); }
+    .prow a.name {
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .prow .blurb {
+      grid-column: 1 / -1;
+      margin: -4px 0 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      max-width: 62em;
+    }
+    .prow .meta {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: right;
+    }
+    .prow .status {
+      font-family: Syne, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-align: right;
+      color: var(--accent);
+    }
+    .prow .status.wip { color: var(--bad); }
+    @media (max-width: 720px) {
+      .prow {
+        grid-template-columns: 1fr auto;
+      }
+      .prow .meta { display: none; }
+    }
+
+    details.more {
+      margin-top: 18px;
+    }
+    details.more summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--accent);
+      list-style: none;
+      padding: 10px 0;
+    }
+    details.more summary::-webkit-details-marker { display: none; }
+    details.more summary::after { content: " ↓"; }
+
+    /* —— Assets —— */
+    .asset-band {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-bottom: 28px;
+    }
+    @media (max-width: 720px) { .asset-band { grid-template-columns: 1fr; } }
+    .asset-band > div {
+      background: var(--bg-2);
+      padding: 22px 20px;
+    }
+    .asset-band .n {
+      font-family: Syne, sans-serif;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .asset-band .l {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .hf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 28px;
+    }
+    @media (max-width: 720px) { .hf-grid { grid-template-columns: 1fr; } }
+    .chip-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip-cloud a {
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 6px 11px;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .chip-cloud a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+    .subhead {
+      font-family: Syne, sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 12px;
+      font-weight: 700;
+    }
+
+    /* —— Stack —— */
+    .stack-line {
+      font-size: clamp(18px, 2.4vw, 24px);
+      line-height: 1.7;
+      font-family: "Noto Serif SC", serif;
+      max-width: 28em;
+      margin: 0 0 28px;
+    }
+    .stack-line span { color: var(--accent); }
+    .tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .tech span::before {
+      content: "";
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-right: 10px;
+      vertical-align: middle;
+      opacity: 0.7;
+    }
+
+    /* —— Footer —— */
+    footer {
+      margin-top: 72px;
+      padding: 40px 0 56px;
+      border-top: 1px solid var(--line);
+    }
+    .foot-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 28px;
+      align-items: end;
+    }
+    @media (max-width: 720px) { .foot-grid { grid-template-columns: 1fr; } }
+    .foot-brand {
+      font-family: Syne, sans-serif;
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin: 0 0 8px;
+    }
+    .foot-note { color: var(--muted); margin: 0; font-size: 14px; }
+    .foot-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: flex-end;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    @media (max-width: 720px) { .foot-links { justify-content: flex-start; } }
+
+    .top-btn {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 40;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: rgba(20, 22, 28, 0.9);
+      color: var(--ink);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .top-btn.show { opacity: 1; pointer-events: auto; }
+    .top-btn:hover { color: var(--accent); border-color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header class="nav" id="nav">
+    <a class="nav-brand" href="#top">0112</a>
+    <nav class="nav-links" aria-label="页面导航">
+      <a href="#proof">演示</a>
+      <a href="#work">精选</a>
+      <a href="#lab">实验</a>
+      <a href="#assets">资产</a>
+      <a href="https://github.com/upnana" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://huggingface.co/upna" target="_blank" rel="noopener">HF</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- Hero: brand + one idea + CTAs over full-bleed robot video -->
+    <section class="hero" aria-label="首页">
+      <div class="hero-media">
+        <video
+          autoplay muted loop playsinline preload="metadata"
+          poster=""
+          aria-label="双臂 SO101 叠方块真机评测">
+          <source src="media/3_blocks_stack_3cam.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <p class="brand">0112<span>Embodied AI · Robot Learning</span></p>
+        <h1>双臂真机上的视觉-语言-动作实验</h1>
+        <p class="hero-lead">
+          SO101 · 12-DoF · VLA / Evo-RL / World-Action-Model。从遥操作采集到策略训练与真机闭环评测，全部本人跑通。
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#proof">看真机演示</a>
+          <a class="btn btn-ghost" href="https://github.com/upnana" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn btn-ghost" href="https://huggingface.co/upna" target="_blank" rel="noopener">Hugging Face</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Proof first -->
+    <section id="proof">
+      <div class="wrap reveal">
+        <p class="sec-kicker">Proof</p>
+        <h2 class="sec-title">真机评测，先看结果</h2>
+        <p class="sec-desc">SmolVLA 在双臂 SO101 上完成叠方块、叠碗与交接；下面是可直接播放的评测录像。</p>
+
+        <div class="proof-grid">
+          <figure class="shot">
+            <video controls playsinline preload="metadata"
+              src="media/3_blocks_stack_3cam.mp4"></video>
+            <figcaption>
+              <strong>叠方块（白→蓝→黑）· 3 相机</strong>
+              <span>SmolVLA · 130k 步 ckpt · 按序成功叠 3 层</span>
+            </figcaption>
+          </figure>
+          <div class="shot-stack">
+            <figure class="shot">
+              <video controls playsinline preload="metadata"
+                src="media/eval_stack_bowls.mp4"></video>
+              <figcaption>
+                <strong>双臂叠碗（黄→棕→白）</strong>
+                <span>ckpt 120k · 非正式 SR 2/3</span>
+              </figcaption>
+            </figure>
+            <figure class="shot">
+              <video controls playsinline preload="metadata"
+                src="media/eval_pass_tape.mp4"></video>
+              <figcaption>
+                <strong>双臂交接双面胶</strong>
+                <span>抓取 → 递臂 → 放黄盘 · ckpt 060000</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured -->
+    <section id="work">
+      <div class="wrap reveal">
+        <p class="sec-kicker">Featured</p>
+        <h2 class="sec-title">三件最能说明问题的工作</h2>
+        <p class="sec-desc">结果先行。细节与脚本在仓库 README。</p>
+
+        <article class="feature">
+          <div class="feature-idx">01 / EVO-RL</div>
+          <div>
+            <h3><a href="https://github.com/upnana/Evo-RL_bowls_tray" target="_blank" rel="noopener">Evo-RL · 真机 RL 迭代闭环</a></h3>
+            <p class="one-liner">HITL 采集 → value 训练 / 推断 → SmolVLA ACP 策略 → 真机 rollout，三轮迭代。</p>
+            <p class="result">数据从 <em>150 → 231 → 287</em> 条；用 value overlay 定量抓住「乐观偏差 / 假进度」，而不只看曲线是否好看。</p>
+          </div>
+          <div class="feature-links">
+            <a href="https://github.com/upnana/Evo-RL_bowls_tray" target="_blank" rel="noopener">仓库 ↗</a>
+            <a href="https://github.com/upnana/Evo-RL_bowls_tray/blob/main/daima/Recap.md" target="_blank" rel="noopener">复盘 ↗</a>
+            <a href="#insight">Value 对照 ↓</a>
+          </div>
+        </article>
+
+        <article class="feature">
+          <div class="feature-idx">02 / SMOLVLA</div>
+          <div>
+            <h3><a href="https://github.com/upnana/smolvla_stack_blocks-white_blue_black" target="_blank" rel="noopener">SmolVLA · 叠方块真机成功</a></h3>
+            <p class="one-liner">双臂 SO101 叠方块（白→蓝→黑）全流程：采集、训练、推理与网页评测。</p>
+            <p class="result"><em>130k</em> 步 checkpoint 真机按序叠满 3 层；同任务与 π0 3-cam 对照见下方实验列表。</p>
+          </div>
+          <div class="feature-links">
+            <a href="https://github.com/upnana/smolvla_stack_blocks-white_blue_black" target="_blank" rel="noopener">仓库 ↗</a>
+            <a href="https://upnana.github.io/smolvla_stack_blocks-white_blue_black/eval.html" target="_blank" rel="noopener">评测页 ↗</a>
+          </div>
+        </article>
+
+        <article class="feature">
+          <div class="feature-idx">03 / EDGE</div>
+          <div>
+            <h3><a href="https://github.com/upnana/lerobot-pi0-rdk-s600-deploy" target="_blank" rel="noopener">π0 · 训练到 RDK S600 部署</a></h3>
+            <p class="one-liner">LeRobot 训练 π0，量化后部署到边缘平台，走通训练 → 真机推理。</p>
+            <p class="result">沉淀可复现步骤与踩坑记录（量化 / 推理工具链），不是只停在训练曲线。</p>
+          </div>
+          <div class="feature-links">
+            <a href="https://github.com/upnana/lerobot-pi0-rdk-s600-deploy" target="_blank" rel="noopener">仓库 ↗</a>
+          </div>
+        </article>
+
+        <div class="insight reveal" id="insight">
+          <div class="insight-copy">
+            <h3>Value overlay：准确 vs 假进度</h3>
+            <p>把 V(s) 曲线和真机画面对齐。曲线抬升 ≠ 任务完成——右边两例对照得很清楚。</p>
+            <p>方法：时间轴 · V(t) · 夹爪开合 · ‖a−s‖ · 人工子任务标注，四路一起看。</p>
+          </div>
+          <div class="insight-pair">
+            <figure class="compare ok">
+              <video controls playsinline preload="metadata"
+                src="media/value_overlay_v3_100k_with_tag.mp4"></video>
+              <figcaption class="label">
+                <b>v3 · 大体准确</b>
+                <span>纸巾入盘时 V 抬升与可见进度一致</span>
+              </figcaption>
+            </figure>
+            <figure class="compare bad">
+              <video controls playsinline preload="metadata"
+                src="media/value_overlay_v2_120k_with_tag.mp4"></video>
+              <figcaption class="label">
+                <b>v2 · 假进度</b>
+                <span>V 抬升，但黄盘空、任务未完成</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lab / all projects -->
+    <section id="lab">
+      <div class="wrap reveal">
+        <p class="sec-kicker">Lab Log · 2026.07–08</p>
+        <h2 class="sec-title">其余真机与对照实验</h2>
+        <p class="sec-desc">同数据对照、仿真 bring-up、世界模型与基础设施。点标题进仓库。</p>
+
+        <div class="plist">
+          <div class="prow">
+            <a class="name" href="https://github.com/upnana/pi0_stack_blocks_white_blue_black_3cam" target="_blank" rel="noopener">π0 · 3cam 叠方块（对照 SmolVLA）</a>
+            <div class="meta">H100 · 80k</div>
+            <div class="status">DONE</div>
+            <p class="blurb">同数据 120ep / 79k 帧。真机 informal SR 约 0/2 vs SmolVLA ~4/5；RTC ~300–370ms/chunk。权重在 HF。</p>
+          </div>
+          <div class="prow">
+            <a class="name" href="https://github.com/upnana/cosmos-edge-lab" target="_blank" rel="noopener">Cosmos3-Edge · World-Action-Model</a>
+            <div class="meta">1×H100</div>
+            <div class="status">DONE</div>
+            <p class="blurb">stack3cam_wam：Vision SFT 已出 I2V（pred/GT）；Action-policy 与 Full SFT vs LoRA 分析齐全。</p>
+          </div>
+          <div class="prow">
+            <a class="name" href="https://github.com/upnana/smolvla_stack_blocks_white_blue_black_3cam" target="_blank" rel="noopener">stack_blocks · 3 相机版</a>
+            <div class="meta">SmolVLA</div>
+            <div class="status">DONE</div>
+            <p class="blurb">遥操作 → 训练 → 真机评测完整日志；也是 Cosmos WAM 数据基础。</p>
+          </div>
+          <div class="prow">
+            <a class="name" href="https://github.com/upnana/stack_bowls" target="_blank" rel="noopener">stack_bowls · 双臂叠碗</a>
+            <div class="meta">200 ep</div>
+            <div class="status">DONE</div>
+            <p class="blurb">98,616 帧 · SmolVLA 250k 步 · ckpt 120k 非正式 SR 2/3。</p>
+          </div>
+          <div class="prow">
+            <a class="name" href="https://github.com/upnana/pass_tape" target="_blank" rel="noopener">pass_tape · 双臂交接</a>
+            <div class="meta">89 ep</div>
+            <div class="status">DONE</div>
+            <p class="blurb">47,074 帧 · 真机甜区 ckpt 060000。</p>
+          </div>
+        </div>
+
+        <details class="more">
+          <summary>更多实验（仿真 / 基础设施 / 研究）</summary>
+          <div class="plist">
+            <div class="prow">
+              <a class="name" href="https://github.com/upnana/isaac-sim-so101" target="_blank" rel="noopener">isaac-sim-so101</a>
+              <div class="meta">Isaac Sim 6</div>
+              <div class="status">DONE</div>
+              <p class="blurb">SO101 URDF、叠块场景、关节 UI，为 sim-to-real 打底。</p>
+            </div>
+            <div class="prow">
+              <a class="name" href="https://github.com/upnana/alohamini_lab" target="_blank" rel="noopener">alohamini_lab · π0.5</a>
+              <div class="meta">AlohaMini</div>
+              <div class="status">DONE</div>
+              <p class="blurb">遥操作调试 + π0.5 叠方块推理笔记。</p>
+            </div>
+            <div class="prow">
+              <a class="name" href="https://github.com/upnana/lerobot_lab" target="_blank" rel="noopener">lerobot_lab</a>
+              <div class="meta">Infra</div>
+              <div class="status">DONE</div>
+              <p class="blurb">本地采集 / 训练 / 推理日常入口。</p>
+            </div>
+            <div class="prow">
+              <a class="name" href="https://github.com/upnana/le-wm" target="_blank" rel="noopener">le-wm · LeWorldModel</a>
+              <div class="meta">复现</div>
+              <div class="status">DONE</div>
+              <p class="blurb">像素级联合嵌入预测架构研读。另见 <a href="https://le-wm.github.io/" target="_blank" rel="noopener">项目页</a>。</p>
+            </div>
+            <div class="prow">
+              <a class="name" href="https://github.com/upnana/chartqa-grpo-refocus" target="_blank" rel="noopener">chartqa-grpo-refocus</a>
+              <div class="meta">VLM</div>
+              <div class="status wip">WIP</div>
+              <p class="blurb">ChartQA 的 GRPO 再聚焦实验。</p>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Assets -->
+    <section id="assets">
+      <div class="wrap reveal">
+        <p class="sec-kicker">Assets</p>
+        <h2 class="sec-title">可下载复现的数据与权重</h2>
+        <p class="sec-desc">真机遥操作 / HITL，LeRobot 格式（30 FPS，关节位置）。公开部分在 Hugging Face <code>upna/*</code>。</p>
+
+        <div class="asset-band">
+          <div>
+            <div class="n">193万+</div>
+            <div class="l">真机采集帧</div>
+          </div>
+          <div>
+            <div class="n">36</div>
+            <div class="l">数据集（含迭代版本）</div>
+          </div>
+          <div>
+            <div class="n">13</div>
+            <div class="l">已上 HF 的公开集</div>
+          </div>
+        </div>
+
+        <div class="hf-grid">
+          <div>
+            <p class="subhead">Models</p>
+            <div class="chip-cloud">
+              <a href="https://huggingface.co/upna/pi05_stack_white_blue_black" target="_blank" rel="noopener">pi05_stack_white_blue_black</a>
+              <a href="https://huggingface.co/upna/pi0_stack_white_blue_black_040000" target="_blank" rel="noopener">pi0 · 040000</a>
+              <a href="https://huggingface.co/upna/pi0_stack_white_blue_black_3cam_060000" target="_blank" rel="noopener">pi0 3cam · 060000</a>
+              <a href="https://huggingface.co/upna/pi0_stack_white_blue_black_3cam_080000" target="_blank" rel="noopener">pi0 3cam · 080000</a>
+            </div>
+          </div>
+          <div>
+            <p class="subhead">Datasets</p>
+            <div class="chip-cloud">
+              <a href="https://huggingface.co/datasets/upna/stack_white_blue_black" target="_blank" rel="noopener">stack_white_blue_black</a>
+              <a href="https://huggingface.co/datasets/upna/stack_3blocks_white_blue_black_3cam" target="_blank" rel="noopener">stack_3blocks_3cam</a>
+              <a href="https://huggingface.co/datasets/upna/bimanual_stack_bowls" target="_blank" rel="noopener">bimanual_stack_bowls</a>
+              <a href="https://huggingface.co/datasets/upna/bimanual-pass-double-sided-tape-roll" target="_blank" rel="noopener">pass-tape</a>
+              <a href="https://huggingface.co/datasets/upna/evo_rl_snacks_tray_stack_bowls_plate" target="_blank" rel="noopener">evo_rl_snacks_tray</a>
+              <a href="https://huggingface.co/datasets/upna/realrobot-experiments" target="_blank" rel="noopener">realrobot-experiments</a>
+              <a href="https://huggingface.co/upna" target="_blank" rel="noopener">全部 upna →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stack -->
+    <section id="stack">
+      <div class="wrap reveal">
+        <p class="sec-kicker">Stack</p>
+        <h2 class="sec-title">怎么做出来的</h2>
+        <p class="stack-line">
+          在双臂 <span>SO101</span> 上跑通采集 → 训练 → 真机闭环；策略侧主要是
+          <span>SmolVLA / π0 / π0.5</span>，强化学习侧是 <span>Evo-RL · ACP</span>，世界模型侧是 <span>Cosmos3-Edge</span>。
+        </p>
+        <div class="tech">
+          <span>PyTorch · Accelerate · DDP · bf16</span>
+          <span>LeRobot · value-train / infer</span>
+          <span>2× RTX 3090 · 1× H100</span>
+          <span>Isaac Sim 6.0</span>
+          <span>RDK S600 边缘部署</span>
+          <span>HITL · 最多 4 相机</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot-grid">
+      <div>
+        <p class="foot-brand">0112</p>
+        <p class="foot-note">具身智能 / 机器人学习作品集 · 2026.07–08<br />求职向展示 · 欢迎通过 GitHub / Hugging Face 联系</p>
+      </div>
+      <div class="foot-links">
+        <a href="https://github.com/upnana" target="_blank" rel="noopener">GitHub ↗</a>
+        <a href="https://huggingface.co/upna" target="_blank" rel="noopener">Hugging Face ↗</a>
+        <a href="#top">回到顶部</a>
+      </div>
+    </div>
+  </footer>
+
+  <button class="top-btn" id="topBtn" type="button" aria-label="回到顶部">↑</button>
+
+  <script>
+    (function () {
+      var topBtn = document.getElementById("topBtn");
+      window.addEventListener("scroll", function () {
+        topBtn.classList.toggle("show", window.scrollY > 600);
+      }, { passive: true });
+      topBtn.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            e.target.classList.add("in");
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+</body>
+</html>
