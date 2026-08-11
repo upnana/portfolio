@@ -768,6 +768,12 @@
 
         <div class="plist">
           <div class="prow">
+            <a class="name" href="https://github.com/upnana/fastwam-libero-repro" target="_blank" rel="noopener">FastWAM · LIBERO 复现</a>
+            <div class="meta">1×H100 · 08-11</div>
+            <div class="status">DONE</div>
+            <p class="blurb">官方权重 2000 episodes 闭环评测 <b>Overall 97.1%</b>（spatial 96.8 / object 99.4 / goal 96.4 / libero_10 95.8）；定位并修复 LeRobot 集成层图像双重归一化，SR 0% → smoke 5/5。</p>
+          </div>
+          <div class="prow">
             <a class="name" href="https://github.com/upnana/pi0_stack_blocks_white_blue_black_3cam" target="_blank" rel="noopener">π0 · 3cam 叠方块（对照 SmolVLA）</a>
             <div class="meta">H100 · 80k</div>
             <div class="status">DONE</div>
@@ -777,7 +783,7 @@
             <a class="name" href="https://github.com/upnana/cosmos-edge-lab" target="_blank" rel="noopener">Cosmos3-Edge · World-Action-Model</a>
             <div class="meta">1×H100</div>
             <div class="status">DONE</div>
-            <p class="blurb">stack3cam_wam：Vision SFT 已出 I2V（pred/GT）；Action-policy 与 Full SFT vs LoRA 分析齐全。<a href="#cosmos">看生成视频 ↓</a></p>
+            <p class="blurb">stack3cam_wam：Vision SFT 500-iter 已出 I2V（held-out ep111，pred/GT 对照）；Action-policy 与 Full SFT vs LoRA 分析齐全。<a href="#cosmos">看生成视频 ↓</a></p>
           </div>
           <div class="prow">
             <a class="name" href="https://github.com/upnana/smolvla_stack_blocks_white_blue_black_3cam" target="_blank" rel="noopener">stack_blocks · 3 相机版</a>
@@ -892,7 +898,7 @@
         <h2 class="sec-title">怎么做出来的</h2>
         <p class="stack-line">
           在双臂 <span>SO101</span> 上跑通采集 → 训练 → 真机闭环；策略侧主要是
-          <span>SmolVLA / π0 / π0.5</span>，强化学习侧是 <span>Evo-RL · ACP</span>，世界模型侧是 <span>Cosmos3-Edge</span>。
+          <span>SmolVLA / π0 / π0.5 / FastWAM</span>，强化学习侧是 <span>Evo-RL · ACP</span>，世界模型侧是 <span>Cosmos3-Edge</span>。
         </p>
         <div class="tech">
           <span>PyTorch · Accelerate · DDP · bf16</span>
