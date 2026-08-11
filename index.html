@@ -267,12 +267,12 @@
   <p class="role">双臂 SO101 真机实验 · 视觉-语言-动作模型（VLA）· Evo-RL / ACP · World-Action-Model</p>
   <div class="chips">
     <span class="chip">📅 2026.07 – 08</span>
-    <span class="chip">📦 12 个实验项目</span>
+    <span class="chip">📦 13 个实验项目</span>
     <span class="chip">🤖 双臂 12-DoF 真机</span>
     <span class="chip">🎯 求职作品展示</span>
   </div>
   <div class="stats">
-    <div class="stat"><div class="num">12</div><div class="lbl">新建仓库</div></div>
+    <div class="stat"><div class="num">13</div><div class="lbl">新建仓库</div></div>
     <div class="stat"><div class="num">6+</div><div class="lbl">真机任务</div></div>
     <div class="stat"><div class="num">3</div><div class="lbl">模型家族</div></div>
     <div class="stat"><div class="num">193万</div><div class="lbl">真机采集帧数</div></div>
@@ -309,7 +309,7 @@
           </div>
         </div>
         <div class="desc">基于 <b>Cosmos3-Edge</b> 的个人 <b>World-Action-Model（WAM）</b>实验：SO-101 / stack-3cam 数据适配与归一化、面向 1×H100 调好的 Vision SFT / Action-policy TOML、启动与转换脚本。</div>
-        <div class="result">首个实验 stack3cam_wam：同一底座并行推进「视觉世界模型 SFT」与「动作策略」两条线，为长程操作提供世界模型先验。</div>
+        <div class="result">首个实验 stack3cam_wam：Vision SFT 已产出 I2V 预览（smoke → 500 iter held-out ep111，pred/GT 并排）；Action-policy 与模块级 Full SFT vs LoRA 分析齐全；对照基线为同任务 π0 3-cam 实验。</div>
         <div class="tags"><span class="tag b">Cosmos3-Edge</span><span class="tag g">World Model</span><span class="tag g">Vision SFT</span><span class="tag o">1×H100</span></div>
         <div class="links"><a href="https://github.com/upnana/cosmos-edge-lab" target="_blank">仓库 ↗</a></div>
       </div>
@@ -349,6 +349,20 @@
     <div class="eyebrow">Projects</div>
     <h2 class="sec">全部项目（2026.07–08）</h2>
     <div class="grid">
+      <div class="card reveal">
+        <div class="top">
+          <div class="icon">⚡</div>
+          <div>
+            <div class="name"><a href="https://github.com/upnana/pi0_stack_blocks_white_blue_black_3cam" target="_blank">pi0_stack_blocks_..._3cam</a></div>
+            <div class="meta">2026-08-11 · H100 · <span class="pill done">已完成</span></div>
+          </div>
+        </div>
+        <div class="desc"><b>π0</b>（PaliGemma 2B + action expert 300M）· 3 相机叠方块：与 SmolVLA <b>同数据</b>（120ep / 79,251 帧），H100 训练至 80k 步，相对动作，权重上传 Hugging Face。</div>
+        <div class="result">对照实验：真机 informal SR 0/2 vs SmolVLA ~4/5（&gt;50%）；latency ~196ms（10 steps / 3090）、真机 RTC ~300–370ms / chunk；评测视频见仓库。</div>
+        <div class="tags"><span class="tag b">π0</span><span class="tag g">H100</span><span class="tag g">相对动作</span><span class="tag o">RTC 真机</span><span class="tag o">对照实验</span></div>
+        <div class="links"><a href="https://github.com/upnana/pi0_stack_blocks_white_blue_black_3cam" target="_blank">仓库 ↗</a><a href="https://huggingface.co/upna/pi0_stack_white_blue_black_3cam_080000" target="_blank">HF 权重 ↗</a></div>
+      </div>
+
       <div class="card reveal">
         <div class="top">
           <div class="icon">🧊</div>
@@ -490,7 +504,11 @@
           </div>
           <div>
             <div style="font-size:13px;font-weight:700;color:#111a2e;margin-bottom:6px">π0 / π0.5</div>
-            <div class="tags"><span class="tag g">pi05_blue_block_yellow_tray（10k/20k）</span><span class="tag g">pi05_yellow_white_base3（40k）</span><span class="tag g">pi05_110k</span></div>
+            <div class="tags"><span class="tag g">pi05_blue_block_yellow_tray（10k/20k）</span><span class="tag g">pi05_yellow_white_base3（40k）</span><span class="tag g">pi05_110k</span><span class="tag g">pi0_stack_3blocks_3cam（H100 · 80k）</span></div>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#111a2e;margin-bottom:6px">Cosmos3-Edge WAM（1×H100）</div>
+            <div class="tags"><span class="tag g">stack3cam_wam Vision SFT（I2V 已产出）</span><span class="tag g">Action-policy 实验文档</span></div>
           </div>
           <div>
             <div style="font-size:13px;font-weight:700;color:#111a2e;margin-bottom:6px">Evo-RL / ACP（真机 RL 闭环）</div>
