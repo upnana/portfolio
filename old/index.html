@@ -310,7 +310,7 @@
           </div>
         </div>
         <div class="desc">基于 <b>Cosmos3-Edge</b> 的个人 <b>World-Action-Model（WAM）</b>实验：SO-101 / stack-3cam 数据适配与归一化、面向 1×H100 调好的 Vision SFT / Action-policy TOML、启动与转换脚本。</div>
-        <div class="result">首个实验 stack3cam_wam：Vision SFT 已产出 I2V 预览（smoke → 500 iter held-out ep111，pred/GT 并排）；Action-policy 与模块级 Full SFT vs LoRA 分析齐全；对照基线为同任务 π0 3-cam 实验。</div>
+        <div class="result">首个实验 stack3cam_wam：Vision SFT 已产出 I2V 预览（smoke → 500 iter held-out ep111，pred/GT 并排）；Action-policy WAM 已出 held-out ep022 多时长评测（1s/3s/8s，GT|WAM|FD 并排）；对照基线为同任务 π0 3-cam 实验。</div>
         <div class="tags"><span class="tag b">Cosmos3-Edge</span><span class="tag g">World Model</span><span class="tag g">Vision SFT</span><span class="tag o">1×H100</span></div>
         <div class="links"><a href="https://github.com/upnana/cosmos-edge-lab" target="_blank">仓库 ↗</a><a href="#videos">I2V 演示视频 ↓</a></div>
       </div>
@@ -608,11 +608,6 @@
       </div>
       <div class="vid reveal">
         <div class="play">▶</div>
-        <video controls preload="metadata" src="../media/cosmos_gt_episode_000119_front_2s.mp4"></video>
-        <div class="cap"><b>10 iter · GT 真机（ep119）</b><span>同 episode front 对齐约 2s。</span></div>
-      </div>
-      <div class="vid reveal">
-        <div class="play">▶</div>
         <video controls preload="metadata" src="../media/cosmos_pred_i2v_heldout_ep111.mp4"></video>
         <div class="cap"><b>500 iter · PRED（held-out ep111）</b><span>49 帧 / 24fps，832×480，条件为 ep111 front 首帧。</span></div>
       </div>
@@ -623,6 +618,26 @@
       </div>
     </div>
     <p class="note" style="margin-top:10px">文档：<a href="https://github.com/upnana/cosmos-edge-lab/blob/main/docs/VISION_500_HELDOUT_I2V.md" target="_blank">VISION_500_HELDOUT_I2V.md</a> · <a href="https://github.com/upnana/cosmos-edge-lab/blob/main/docs/VISION_SMOKE_EXPORT_I2V.md" target="_blank">VISION_SMOKE_EXPORT_I2V.md</a>（GIF 与 8s 长版见仓库内）</p>
+    <h3 style="margin:24px 0 6px;color:#1e40af">🤖 Cosmos3-Edge Action-Policy WAM · held-out ep022（1s / 3s / 8s）</h3>
+    <p style="font-size:13.5px;color:#3d4a63;margin:0 0 8px">Action 预测与 GT 真机并排（GT | WAM | FD）：job <code>stack3cam_action_policy_edge_2000 · iter 2000</code>，front|wrist @256 / 30fps / auto-motion；评测 episodes 3 / 22 / 47 / 69 / 99，这里展示 ep022。</p>
+    <div class="vids">
+      <div class="vid reveal">
+        <div class="play">▶</div>
+        <video controls preload="metadata" src="../media/cosmos_action_ep022_1s.mp4"></video>
+        <div class="cap"><b>1s（chunk 32）· ep022</b><span>Action L1 9.19°（norm 0.442）· WAM 19.1 dB · FD 19.0 dB</span></div>
+      </div>
+      <div class="vid reveal">
+        <div class="play">▶</div>
+        <video controls preload="metadata" src="../media/cosmos_action_ep022_3s.mp4"></video>
+        <div class="cap"><b>3s（chunk 96）· ep022</b><span>Action L1 28.17°（norm 1.037）· WAM 16.8 dB · FD 17.8 dB</span></div>
+      </div>
+      <div class="vid reveal">
+        <div class="play">▶</div>
+        <video controls preload="metadata" src="../media/cosmos_action_ep022_8s.mp4"></video>
+        <div class="cap"><b>8s（chunk 240）· ep022</b><span>Action L1 18.20°（norm 0.756）· WAM 14.1 dB · FD 14.1 dB</span></div>
+      </div>
+    </div>
+    <p class="note" style="margin-top:10px">文档：<a href="https://github.com/upnana/cosmos-edge-lab/blob/main/docs/ACTION_POLICY_WAM_MORE.md" target="_blank">ACTION_POLICY_WAM_MORE.md</a>（各 duration 均值：1s L1 14.41°/norm 0.612 / WAM 17.8 / FD 17.9 · 3s 22.21°/0.855 / 16.9 / 17.1 · 8s 20.23°/0.795 / 15.1 / 15.1）</p>
     <h3 style="margin:24px 0 6px;color:#1e40af">🤗 Hugging Face · realrobot-experiments 真机评测视频</h3>
     <p style="font-size:13.5px;color:#3d4a63;margin:0 0 8px">多模型（SmolVLA / π0.5 / ACT / GR00T）× SO101 真机评测，覆盖成功案例与鲁棒性实验：</p>
     <div class="tags" style="margin-bottom:12px">
