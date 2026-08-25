@@ -1,732 +1,402 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>0112 · Embodied AI / Robot Learning Portfolio（旧版）</title>
-<style>
-  :root {
-    --bg: #f6f7fb;
-    --card: #ffffff;
-    --ink: #1a2233;
-    --muted: #64748b;
-    --line: #e6e9f2;
-    --accent: #2563eb;
-    --accent-2: #7c3aed;
-    --accent-3: #06b6d4;
-    --ok: #059669;
-    --warn: #d97706;
-    --radius: 18px;
-    --shadow: 0 1px 2px rgba(16,24,40,.04), 0 4px 16px rgba(16,24,40,.06);
-    --shadow-lg: 0 10px 34px rgba(37,99,235,.16), 0 2px 8px rgba(16,24,40,.06);
-  }
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    font-family: "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    line-height: 1.75;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-
-  /* ===== Nav ===== */
-  .nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 28px;
-    transition: background .3s ease, box-shadow .3s ease, backdrop-filter .3s ease;
-  }
-  .nav .brand { font-weight: 800; letter-spacing: 1px; font-size: 15px; color: #fff; }
-  .nav .brand span { color: rgba(255,255,255,.75); font-weight: 500; }
-  .nav .links { display: flex; gap: 22px; align-items: center; }
-  .nav .links a { color: rgba(255,255,255,.88); font-size: 13.5px; font-weight: 600; }
-  .nav .links a:hover { color: #fff; text-decoration: none; }
-  .nav .gh { color: #fff; font-size: 13px; font-weight: 700; }
-  .nav.scrolled {
-    background: rgba(255,255,255,.82);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    box-shadow: 0 1px 12px rgba(16,24,40,.08);
-  }
-  .nav.scrolled .brand { color: #111a2e; }
-  .nav.scrolled .brand span { color: var(--muted); }
-  .nav.scrolled .links a { color: #33415c; }
-  .nav.scrolled .links a:hover { color: var(--accent); }
-  .nav.scrolled .gh { color: var(--accent); }
-
-  /* ===== Hero ===== */
-  .hero {
-    position: relative; color: #fff; text-align: center;
-    padding: 120px 24px 104px; overflow: hidden;
-    background:
-      radial-gradient(1000px 500px at 15% -10%, rgba(124,58,237,.55), transparent 60%),
-      radial-gradient(900px 480px at 85% -20%, rgba(6,182,212,.4), transparent 55%),
-      linear-gradient(135deg, #0f1c42 0%, #1e3a8a 45%, #2563eb 100%);
-  }
-  .hero::before {
-    content: ""; position: absolute; inset: 0;
-    background-image: radial-gradient(rgba(255,255,255,.14) 1px, transparent 1px);
-    background-size: 26px 26px;
-    mask-image: linear-gradient(180deg, rgba(0,0,0,.5), transparent 75%);
-    -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,.5), transparent 75%);
-  }
-  .blob { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .5; animation: float 9s ease-in-out infinite; }
-  .blob.b1 { width: 340px; height: 340px; left: -80px; top: 20px; background: rgba(124,58,237,.55); }
-  .blob.b2 { width: 280px; height: 280px; right: -60px; top: 60px; background: rgba(6,182,212,.5); animation-delay: -4.5s; }
-  @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-26px) } }
-  .hero > * { position: relative; z-index: 1; }
-
-  .monogram {
-    width: 78px; height: 78px; margin: 0 auto 18px;
-    display: grid; place-items: center;
-    font-size: 30px; font-weight: 800; letter-spacing: 1px; color: #fff;
-    border-radius: 24px;
-    background: linear-gradient(135deg, rgba(255,255,255,.22), rgba(255,255,255,.06));
-    border: 1px solid rgba(255,255,255,.35);
-    box-shadow: 0 12px 34px rgba(0,0,0,.28);
-    backdrop-filter: blur(8px);
-    animation: pop .7s cubic-bezier(.2,1.4,.4,1) both;
-  }
-  @keyframes pop { from { transform: scale(.6); opacity: 0 } to { transform: scale(1); opacity: 1 } }
-  .hero h1 { margin: 0 0 8px; font-size: clamp(28px, 4.6vw, 44px); letter-spacing: 2px; font-weight: 800; animation: fadeUp .6s .08s both; }
-  .hero .en { margin: 0 0 10px; font-size: 13.5px; letter-spacing: 3px; color: rgba(255,255,255,.7); font-weight: 600; animation: fadeUp .6s .16s both; }
-  .hero .role { margin: 0 auto; max-width: 700px; font-size: clamp(14px, 2vw, 16.5px); color: rgba(255,255,255,.92); animation: fadeUp .6s .24s both; }
-  .hero .chips { margin-top: 22px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; animation: fadeUp .6s .32s both; }
-  .chip {
-    padding: 5px 14px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
-    background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.3);
-    backdrop-filter: blur(6px);
-  }
-  .hero .stats {
-    margin: 34px auto 0; max-width: 860px;
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
-    animation: fadeUp .6s .4s both;
-  }
-  @media (max-width: 720px) { .hero .stats { grid-template-columns: repeat(2, 1fr); } }
-  .stat {
-    padding: 14px 10px; border-radius: 16px;
-    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.22);
-    backdrop-filter: blur(10px);
-    transition: transform .2s ease, background .2s ease;
-  }
-  .stat:hover { transform: translateY(-3px); background: rgba(255,255,255,.16); }
-  .stat .num { font-size: 26px; font-weight: 800; line-height: 1.2; }
-  .stat .lbl { font-size: 12px; color: rgba(255,255,255,.8); margin-top: 2px; }
-
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: none } }
-
-  /* ===== Layout ===== */
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
-  main { margin-top: -52px; }
-  section { margin-bottom: 30px; scroll-margin-top: 76px; }
-
-  .eyebrow {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 12.5px; font-weight: 700; letter-spacing: 2px;
-    color: var(--accent); text-transform: uppercase; margin-bottom: 6px;
-  }
-  .eyebrow::before { content: ""; width: 22px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-3)); }
-  h2.sec { margin: 0 0 18px; font-size: 22px; font-weight: 800; }
-
-  /* ===== Cards ===== */
-  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
-  .card {
-    position: relative;
-    background: var(--card); border: 1px solid var(--line);
-    border-radius: var(--radius); padding: 20px 20px 18px;
-    box-shadow: var(--shadow);
-    display: flex; flex-direction: column; gap: 8px;
-    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-  }
-  .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: #c7d7fb; }
-  .card .top { display: flex; align-items: flex-start; gap: 12px; }
-  .card .icon {
-    flex: none; width: 42px; height: 42px; border-radius: 12px;
-    display: grid; place-items: center; font-size: 20px;
-    background: linear-gradient(135deg, #eef2ff, #e0f2fe);
-    transition: transform .2s ease;
-  }
-  .card:hover .icon { transform: scale(1.08) rotate(-4deg); }
-  .card .name { font-size: 15.5px; font-weight: 700; color: #111a2e; line-height: 1.4; }
-  .card .name a { color: inherit; }
-  .card .name a:hover { color: var(--accent); }
-  .card .meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .card .desc { font-size: 13.5px; color: #3d4a63; flex: 1; }
-  .card .result {
-    font-size: 12.5px; color: #1d4ed8;
-    background: linear-gradient(135deg, #eff6ff, #f5f3ff);
-    border: 1px solid #dbeafe; border-radius: 10px; padding: 8px 12px;
-  }
-  .card .links { font-size: 12.5px; display: flex; flex-wrap: wrap; gap: 4px 12px; }
-  .card .links a { font-weight: 600; }
-  .card .links a:hover { text-decoration: underline; }
-
-  .pill {
-    display: inline-block; padding: 1px 9px; border-radius: 999px;
-    font-size: 11px; font-weight: 700; letter-spacing: .3px;
-  }
-  .pill.done { background: #ecfdf5; color: var(--ok); border: 1px solid #a7f3d0; }
-  .pill.wip  { background: #fffbeb; color: var(--warn); border: 1px solid #fde68a; }
-  .pill.study{ background: #eff6ff; color: var(--accent); border: 1px solid #bfdbfe; }
-
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .tag {
-    padding: 1px 10px; border-radius: 999px;
-    font-size: 11.5px; font-weight: 600;
-    background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0;
-  }
-  .tag.b { background: #eef2ff; color: #4338ca; border-color: #e0e7ff; }
-  .tag.g { background: #ecfdf5; color: #047857; border-color: #d1fae5; }
-  .tag.o { background: #fffbeb; color: #b45309; border-color: #fef3c7; }
-  .tag.c { background: #ecfeff; color: #0e7490; border-color: #cffafe; }
-  .tag a { color: inherit; }
-
-  .feat { background: linear-gradient(180deg, #fbfdff, #fff); border-color: #cfe0ff; }
-  .feat::after {
-    content: "★ 精选";
-    position: absolute; top: 14px; right: 14px;
-    font-size: 10.5px; font-weight: 800; letter-spacing: 1px; color: #b45309;
-    background: #fef3c7; border: 1px solid #fde68a;
-    padding: 2px 8px; border-radius: 999px;
-  }
-  .feat .name { font-size: 16px; }
-
-  /* ===== Reveal ===== */
-  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
-  .reveal.in { opacity: 1; transform: none; }
-
-  /* ===== Video ===== */
-  .vids { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  @media (max-width: 860px) { .vids { grid-template-columns: 1fr; } }
-  .vid { background: #000; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); position: relative; }
-  .vid video { display: block; width: 100%; height: auto; }
-  .vid .play {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    width: 54px; height: 54px; border-radius: 50%;
-    background: rgba(255,255,255,.92); color: var(--accent);
-    display: grid; place-items: center; font-size: 20px;
-    box-shadow: 0 8px 24px rgba(0,0,0,.35);
-    opacity: 0; transition: opacity .2s ease, transform .2s ease;
-    pointer-events: none;
-  }
-  .vid:hover .play { opacity: 1; transform: translate(-50%,-50%) scale(1.05); }
-  .vid .cap { background: var(--card); padding: 10px 14px 12px; }
-  .vid .cap b { display: block; font-size: 13.5px; color: #111a2e; margin-bottom: 2px; }
-  .vid .cap span { font-size: 12.5px; color: var(--muted); }
-
-  /* ===== Panel ===== */
-  .panel {
-    background: var(--card); border: 1px solid var(--line);
-    border-radius: var(--radius); padding: 22px;
-    box-shadow: var(--shadow);
-  }
-  .panel p { font-size: 14px; color: #3d4a63; margin: 0 0 14px; }
-
-  /* ===== Back to top ===== */
-  .top-btn {
-    position: fixed; right: 22px; bottom: 22px; z-index: 90;
-    width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line);
-    background: rgba(255,255,255,.9); color: var(--accent);
-    font-size: 17px; cursor: pointer;
-    box-shadow: var(--shadow);
-    opacity: 0; transform: translateY(8px); pointer-events: none;
-    transition: opacity .25s ease, transform .25s ease;
-  }
-  .top-btn.show { opacity: 1; transform: none; pointer-events: auto; }
-  .top-btn:hover { background: #fff; box-shadow: var(--shadow-lg); }
-
-  footer { text-align: center; font-size: 12.5px; color: var(--muted); padding: 10px 20px 46px; }
-  .note { font-size: 12.5px; color: var(--muted); margin-top: 12px; }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b0f">
+  <meta name="description" content="具身智能与机器人学习作品集：从灵巧手、真机数据采集、VLA 训练到闭环评测与边缘部署。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="具身智能 / 机器人学习">
+  <meta property="og:description" content="从数据采集到真机闭环——真实机器人实验、量化结果与可复现工程。">
+  <meta property="og:image" content="https://upnana.github.io/portfolio/old/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="具身智能 / 机器人学习">
+  <meta name="twitter:description" content="从数据采集到真机闭环——真实机器人实验、量化结果与可复现工程。">
+  <meta name="twitter:image" content="https://upnana.github.io/portfolio/old/assets/og.png">
+  <title>Embodied AI / Robot Learning Portfolio</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
-<nav class="nav" id="nav">
-  <div class="brand">0112<span> · Portfolio</span></div>
-  <div class="links">
-    <a href="../">新版 ↗</a>
-    <a href="#featured">精选</a>
-    <a href="#projects">项目</a>
-    <a href="#videos">演示</a>
-    <a href="#stack">技术栈</a>
-    <a class="gh" href="https://huggingface.co/upna" target="_blank">HF ↗</a>
-    <a class="gh" href="https://github.com/upnana" target="_blank">GitHub ↗</a>
-  </div>
-</nav>
+  <header class="site-header" id="siteHeader">
+    <a class="brand" href="#top" aria-label="回到首页">
+      <span class="brand-mark">AI</span>
+      <span class="brand-copy"><b>EMBODIED AI</b><small>ROBOT LEARNING</small></span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="siteNav">
+      <span></span><span></span><span></span><span class="sr-only">打开导航</span>
+    </button>
+    <nav class="site-nav" id="siteNav" aria-label="主导航">
+      <a href="#field">实验现场</a>
+      <a href="#featured">精选项目</a>
+      <a href="#pipeline">能力闭环</a>
+      <a href="#archive">演示档案</a>
+      <a class="nav-link-out" href="https://github.com/upnana" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
+    </nav>
+  </header>
 
-<!-- ===== Hero ===== -->
-<header class="hero">
-  <div class="blob b1"></div>
-  <div class="blob b2"></div>
-  <div class="monogram">01</div>
-  <h1>0112 · 具身智能 / 机器人学习</h1>
-  <p class="en">EMBODIED AI · ROBOT LEARNING · VLA</p>
-  <p class="role">双臂 SO101 真机实验 · 视觉-语言-动作模型（VLA）· Evo-RL / ACP · World-Action-Model</p>
-  <div class="chips">
-    <span class="chip">📅 2026.07 – 08</span>
-    <span class="chip">📦 13 个实验项目</span>
-    <span class="chip">🤖 双臂 12-DoF 真机</span>
-    <span class="chip">🎯 求职作品展示</span>
-  </div>
-  <div class="stats">
-    <div class="stat"><div class="num">13</div><div class="lbl">新建仓库</div></div>
-    <div class="stat"><div class="num">6+</div><div class="lbl">真机任务</div></div>
-    <div class="stat"><div class="num">3</div><div class="lbl">模型家族</div></div>
-    <div class="stat"><div class="num">193万</div><div class="lbl">真机采集帧数</div></div>
-  </div>
-</header>
+  <main>
+    <section class="hero" id="top">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="glow glow-one" aria-hidden="true"></div>
+      <div class="glow glow-two" aria-hidden="true"></div>
 
-<main class="wrap">
-
-  <!-- ===== 精选 ===== -->
-  <section id="featured">
-    <div class="eyebrow">Featured</div>
-    <h2 class="sec">精选项目</h2>
-    <div class="grid">
-      <div class="card feat reveal">
-        <div class="top">
-          <div class="icon">🤖</div>
-          <div>
-            <div class="name"><a href="https://github.com/upnana/Evo-RL_bowls_tray" target="_blank">Evo-RL_bowls_tray</a></div>
-            <div class="meta">2026-07-28 · Python</div>
+      <div class="hero-inner">
+        <div class="hero-copy reveal is-visible">
+          <p class="availability"><span></span> OPEN TO ROBOT LEARNING ROLES</p>
+          <h1>让机器人从数据中<br><em>学会真实世界的动作。</em></h1>
+          <p class="hero-lead">具身智能 / 机器人学习工程实践。覆盖真机数据采集、VLA 与 RL 训练、价值函数诊断、世界模型评测和边缘部署。</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#field">观看真机实验 <span>↓</span></a>
+            <a class="button button-ghost" href="https://github.com/upnana" target="_blank" rel="noreferrer">查看 GitHub <span>↗</span></a>
+          </div>
+          <div class="hero-tags" aria-label="核心方向">
+            <span>LEROBOT</span><span>VLA</span><span>DEXTEROUS HAND</span><span>EVO-RL</span><span>WORLD MODEL</span><span>SIM2REAL</span>
           </div>
         </div>
-        <div class="desc">双臂 SO101 真机 <b>Evo-RL / ACP</b> 端到端流水线：HITL 采集 → pistar06 value 训练 → value infer → SmolVLA ACP 策略训练 → 真机 rollout 闭环，三轮迭代（150 → 231 → 287 条）。</div>
-        <div class="result">亮点：完整跑通真机 RL 迭代闭环；value overlay 定量诊断「乐观偏差 / 假进度」；ACP tag A/B 对照实验；全量复盘沉淀。</div>
-        <div class="tags"><span class="tag b">LeRobot</span><span class="tag g">Evo-RL / ACP</span><span class="tag g">Value</span><span class="tag o">HITL 迭代</span></div>
-        <div class="links"><a href="https://github.com/upnana/Evo-RL_bowls_tray" target="_blank">仓库 ↗</a><a href="https://github.com/upnana/Evo-RL_bowls_tray/blob/main/daima/Recap.md" target="_blank">复盘文档 ↗</a><a href="#videos">演示视频 ↓</a></div>
-      </div>
 
-      <div class="card feat reveal">
-        <div class="top">
-          <div class="icon">🌌</div>
-          <div>
-            <div class="name"><a href="https://github.com/upnana/cosmos-edge-lab" target="_blank">cosmos-edge-lab</a></div>
-            <div class="meta">2026-08-10 · Python</div>
+        <div class="hero-visual reveal is-visible">
+          <div class="hero-screen">
+            <div class="screen-bar">
+              <span><i></i> PHYSICAL ROLLOUT</span>
+              <span>REBOT-601-RS / 30 FPS</span>
+            </div>
+            <video autoplay muted loop playsinline preload="metadata" poster="assets/posters/rebot.jpg" aria-label="Rebot-601-RS 真机抓取演示">
+              <source src="../media/rebot-601-rs.mp4" type="video/mp4">
+            </video>
+            <div class="screen-hud" aria-hidden="true">
+              <span>OBS_01</span><span>ACT_CHUNK</span><span>LIVE</span>
+            </div>
           </div>
-        </div>
-        <div class="desc">基于 <b>Cosmos3-Edge</b> 的个人 <b>World-Action-Model（WAM）</b>实验：SO-101 / stack-3cam 数据适配与归一化、面向 1×H100 调好的 Vision SFT / Action-policy TOML、启动与转换脚本。</div>
-        <div class="result">首个实验 stack3cam_wam：Vision SFT 已产出 I2V 预览（smoke → 500 iter held-out ep111，pred/GT 并排）；Action-policy WAM 已出 held-out ep022 多时长评测（1s/3s/8s，GT|WAM|FD 并排）；对照基线为同任务 π0 3-cam 实验。</div>
-        <div class="tags"><span class="tag b">Cosmos3-Edge</span><span class="tag g">World Model</span><span class="tag g">Vision SFT</span><span class="tag o">1×H100</span></div>
-        <div class="links"><a href="https://github.com/upnana/cosmos-edge-lab" target="_blank">仓库 ↗</a><a href="#videos">I2V 演示视频 ↓</a></div>
-      </div>
-
-      <div class="card feat reveal">
-        <div class="top">
-          <div class="icon">🧊</div>
-          <div>
-            <div class="name"><a href="https://github.com/upnana/smolvla_stack_blocks-white_blue_black" target="_blank">smolvla_stack_blocks（白→蓝→黑）</a></div>
-            <div class="meta">2026-08-07 · Shell</div>
-          </div>
-        </div>
-        <div class="desc">双臂 SO101 叠方块任务的采集 / 训练 / 推理脚本与笔记，LeRobot + SmolVLA 全流程。</div>
-        <div class="result">真机评测：<b>130k 步 ckpt 成功叠 3 层</b>，含网页版评测总结与视频（GitHub Pages 托管）。</div>
-        <div class="tags"><span class="tag b">SmolVLA</span><span class="tag g">真机评测</span></div>
-        <div class="links"><a href="https://github.com/upnana/smolvla_stack_blocks-white_blue_black" target="_blank">仓库 ↗</a><a href="https://upnana.github.io/smolvla_stack_blocks-white_blue_black/eval.html" target="_blank">在线评测页 ↗</a></div>
-      </div>
-
-      <div class="card feat reveal">
-        <div class="top">
-          <div class="icon">📦</div>
-          <div>
-            <div class="name"><a href="https://github.com/upnana/lerobot-pi0-rdk-s600-deploy" target="_blank">lerobot-pi0-rdk-s600-deploy</a></div>
-            <div class="meta">2026-08-06 · Shell</div>
-          </div>
-        </div>
-        <div class="desc">用 LeRobot 训练 <b>π0</b> 并量化部署到 <b>RDK S600</b> 边缘平台：从训练到真机推理的完整个人复现教程。</div>
-        <div class="result">沉淀了走通全流程的步骤、命令与踩坑记录（量化、推理工具链适配），可直接复现。</div>
-        <div class="tags"><span class="tag b">π0</span><span class="tag g">量化部署</span><span class="tag o">RDK S600</span></div>
-        <div class="links"><a href="https://github.com/upnana/lerobot-pi0-rdk-s600-deploy" target="_blank">仓库 ↗</a></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== 全部项目 ===== -->
-  <section id="projects">
-    <div class="eyebrow">Projects</div>
-    <h2 class="sec">全部项目（2026.07–08）</h2>
-    <div class="grid">
-      <div class="card reveal">
-        <div class="top">
-          <div class="icon">⚡</div>
-          <div>
-            <div class="name"><a href="https://github.com/upnana/pi0_stack_blocks_white_blue_black_3cam" target="_blank">pi0_stack_blocks_..._3cam</a></div>
-            <div class="meta">2026-08-11 · H100 · <span class="pill done">已完成</span></div>
-          </div>
-        </div>
-        <div class="desc"><b>π0</b>（PaliGemma 2B + action expert 300M）· 3 相机叠方块：与 SmolVLA <b>同数据</b>（120ep / 79,251 帧），H100 训练至 80k 步，相对动作，权重上传 Hugging Face。</div>
-        <div class="result">对照实验：真机 informal SR 0/2 vs SmolVLA ~4/5（&gt;50%）；latency ~196ms（10 steps / 3090）、真机 RTC ~300–370ms / chunk；评测视频见仓库。</div>
-        <div class="tags"><span class="tag b">π0</span><span class="tag g">H100</span><span class="tag g">相对动作</span><span class="tag o">RTC 真机</span><span class="tag o">对照实验</span></div>
-        <div class="links"><a href="https://github.com/upnana/pi0_stack_blocks_white_blue_black_3cam" target="_blank">仓库 ↗</a><a href="https://huggingface.co/upna/pi0_stack_white_blue_black_3cam_080000" target="_blank">HF 权重 ↗</a></div>
-      </div>
-
-      <div class="card reveal">
-        <div class="top">
-          <div class="icon">🧊</div>
-          <div>
-            <div class="name"><a href="https://github.com/upnana/smolvla_stack_blocks_white_blue_black_3cam" target="_blank">stack_blocks · 3 相机版</a></div>
-            <div class="meta">2026-08-09 · Shell · <span class="pill done">已完成</span></div>
-          </div>
-        </div>
-        <div class="desc">叠方块任务 <b>3 相机</b>完整实验日志（遥操作 → SmolVLA 训练 → 真机评测），也是 Cosmos WAM 实验的数据基础。</div>
-        <div class="tags"><span class="tag b">SmolVLA</span><span class="tag g">3 相机</span></div>
-        <div class="links"><a href="https://github.com/upnana/smolvla_stack_blocks_white_blue_black_3cam" target="_blank">仓库 ↗</a></div>
-      </div>
-
-      <div class="card reveal">
-        <div class="top">
-          <div class="icon">🥣</div>
-          <div>
-            <div class="name"><a href="https://github.com/upnana/stack_bowls" target="_blank">stack_bowls</a></div>
-            <div class="meta">2026-08-09 · Shell · <span class="pill done">已完成</span></div>
-          </div>
-        </div>
-        <div class="desc">双臂叠碗任务（黄→棕→白）：200 episodes / 98,616 帧，SmolVLA 250k 步训练，ckpt 120k 非正式 SR 2/3。</div>
-        <div class="tags"><span class="tag b">SmolVLA</span><span class="tag g">200 episodes</span></div>
-        <div class="links"><a href="https://github.com/upnana/stack_bowls" target="_blank">仓库 ↗</a></div>
-      </div>
-
-      <div class="card reveal">
-        <div class="top">
-          <div class="icon">🤝</div>
-          <div>
-            <div class="name"><a href="https://github.com/upnana/pass_tape" target="_blank">pass_tape</a></div>
-            <div class="meta">2026-08-09 · Shell · <span class="pill done">已完成</span></div>
-          </div>
-        </div>
-        <div class="desc">双臂<b>交接</b>任务：抓双面胶 → 递给另一臂 → 放黄盘。89 episodes / 47,074 帧，训练至 ~120k，真机甜区 ckpt 060000。</div>
-        <div class="tags"><span class="tag b">SmolVLA</span><span class="tag g">双臂交接</span></div>
-        <div class="links"><a href="https://github.com/upnana/pass_tape" target="_blank">仓库 ↗</a></div>
-      </div>
-
-      <div class="card reveal">
-        <div class="top">
-          <div class="icon">🎛️</div>
-          <div>
-            <div class="name"><a href="https://github.com/upnana/isaac-sim-so101" target="_blank">isaac-sim-so101</a></div>
-            <div class="meta">2026-08-09 · Python · <span class="pill done">已完成</span></div>
-          </div>
-        </div>
-        <div class="desc">NVIDIA <b>Isaac Sim 6.0</b> 仿真 bring-up：SO101 URDF 导入、叠块场景、关节 UI 控制，为 sim-to-real 打底。</div>
-        <div class="tags"><span class="tag b">Isaac Sim</span><span class="tag g">Sim2Real</span></div>
-        <div class="links"><a href="https://github.com/upnana/isaac-sim-so101" target="_blank">仓库 ↗</a></div>
-      </div>
-
-      <div class="card reveal">
-        <div class="top">
-          <div class="icon">🫳</div>
-          <div>
-            <div class="name"><a href="https://github.com/upnana/alohamini_lab" target="_blank">alohamini_lab</a></div>
-            <div class="meta">2026-08-06 · Shell · <span class="pill done">已完成</span></div>
-          </div>
-        </div>
-        <div class="desc"><b>π0.5 × AlohaMini</b> 实验：遥操作调试笔记 + π0.5 叠方块（白→蓝→黑）推理脚本与结论。</div>
-        <div class="tags"><span class="tag b">π0.5</span><span class="tag g">AlohaMini</span></div>
-        <div class="links"><a href="https://github.com/upnana/alohamini_lab" target="_blank">仓库 ↗</a></div>
-      </div>
-
-      <div class="card reveal">
-        <div class="top">
-          <div class="icon">🧪</div>
-          <div>
-            <div class="name"><a href="https://github.com/upnana/lerobot_lab" target="_blank">lerobot_lab</a></div>
-            <div class="meta">2026-07-28 · Python · <span class="pill done">已完成</span></div>
-          </div>
-        </div>
-        <div class="desc">LeRobot 本地化实验环境：数据采集 / 训练 / 推理基础设施与日常实验入口。</div>
-        <div class="tags"><span class="tag b">LeRobot</span><span class="tag g">基础设施</span></div>
-        <div class="links"><a href="https://github.com/upnana/lerobot_lab" target="_blank">仓库 ↗</a></div>
-      </div>
-
-      <div class="card reveal">
-        <div class="top">
-          <div class="icon">📖</div>
-          <div>
-            <div class="name"><a href="https://github.com/upnana/le-wm" target="_blank">le-wm（LeWorldModel）</a></div>
-            <div class="meta">2026-07-22 · <span class="pill study">研究复现</span></div>
-          </div>
-        </div>
-        <div class="desc">LeCun 团队 <b>LeWorldModel</b>（像素级联合嵌入预测架构）官方代码研读 / 复现，为世界模型方向打基础。</div>
-        <div class="tags"><span class="tag b">World Model</span><span class="tag g">JEPA</span></div>
-        <div class="links"><a href="https://github.com/upnana/le-wm" target="_blank">仓库 ↗</a><a href="https://le-wm.github.io/" target="_blank">项目页 ↗</a></div>
-      </div>
-
-      <div class="card reveal">
-        <div class="top">
-          <div class="icon">📊</div>
-          <div>
-            <div class="name"><a href="https://github.com/upnana/chartqa-grpo-refocus" target="_blank">chartqa-grpo-refocus</a></div>
-            <div class="meta">2026-08-12 · <span class="pill done">完成</span></div>
-          </div>
-        </div>
-        <div class="desc">Qwen2.5-VL + <b>GRPO</b> 微调 ChartQA（1×H100）：base 0.026 → 训练后 0.864（Δ+0.838）；tool on/off 空消融 Δ−0.003；DeepSeek LLM-judge 曲线 ~0.58。</div>
-        <div class="tags"><span class="tag b">GRPO</span><span class="tag g">VLM</span></div>
-        <div class="links"><a href="https://github.com/upnana/chartqa-grpo-refocus" target="_blank">仓库 ↗</a></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== 实验资产 ===== -->
-  <section id="assets">
-    <div class="eyebrow">Assets</div>
-    <h2 class="sec">实验资产（数据集 & 训练产出）</h2>
-    <div class="grid">
-
-      <div class="panel reveal">
-        <h3 style="margin-top:0">📊 数据集 · 36 个 / 2,843 episodes / 193.5 万帧</h3>
-        <p>全部真机遥操作 / HITL 采集，LeRobot 格式（30 FPS，关节位置控制）；13 个数据集同步上传 Hugging Face（<code>upna/*</code>）。</p>
-        <table style="width:100%;border-collapse:collapse;font-size:12.5px">
-          <tr style="color:var(--muted);text-align:left"><th style="padding:4px 8px;border-bottom:1px solid var(--line)">数据集</th><th style="padding:4px 8px;border-bottom:1px solid var(--line)">任务</th><th style="padding:4px 8px;border-bottom:1px solid var(--line);text-align:right">episodes</th><th style="padding:4px 8px;border-bottom:1px solid var(--line);text-align:right">frames</th></tr>
-          <tr><td style="padding:4px 8px"><code>evo_rl_bowls_..._v3</code></td><td style="padding:4px 8px">叠碗+口红+纸巾（Evo-RL 最终）</td><td style="padding:4px 8px;text-align:right">287</td><td style="padding:4px 8px;text-align:right">262,484</td></tr>
-          <tr><td style="padding:4px 8px"><code>stack_3blocks_white_blue_black</code></td><td style="padding:4px 8px">叠方块（白→蓝→黑）</td><td style="padding:4px 8px;text-align:right">316</td><td style="padding:4px 8px;text-align:right">185,968</td></tr>
-          <tr><td style="padding:4px 8px"><code>bimanual_stack_bowls_...</code></td><td style="padding:4px 8px">双臂叠碗（黄→棕→白）</td><td style="padding:4px 8px;text-align:right">200</td><td style="padding:4px 8px;text-align:right">98,616</td></tr>
-          <tr><td style="padding:4px 8px"><code>smolvla_multitask_merged</code></td><td style="padding:4px 8px">多任务合并</td><td style="padding:4px 8px;text-align:right">182</td><td style="padding:4px 8px;text-align:right">148,787</td></tr>
-          <tr><td style="padding:4px 8px"><code>evo_rl_bowls_..._v2</code></td><td style="padding:4px 8px">叠碗+口红+纸巾（第 2 轮）</td><td style="padding:4px 8px;text-align:right">231</td><td style="padding:4px 8px;text-align:right">216,041</td></tr>
-          <tr><td style="padding:4px 8px"><code>stack_3blocks_..._3cam</code></td><td style="padding:4px 8px">叠方块 3 相机</td><td style="padding:4px 8px;text-align:right">120</td><td style="padding:4px 8px;text-align:right">79,251</td></tr>
-          <tr><td style="padding:4px 8px"><code>bimanual_handover_4cam</code></td><td style="padding:4px 8px">双臂交接双面胶</td><td style="padding:4px 8px;text-align:right">89</td><td style="padding:4px 8px;text-align:right">47,074</td></tr>
-          <tr><td style="padding:4px 8px"><code>blue_block_yellow_tray</code></td><td style="padding:4px 8px">蓝块入黄盘</td><td style="padding:4px 8px;text-align:right">90</td><td style="padding:4px 8px;text-align:right">28,877</td></tr>
-          <tr><td style="padding:4px 8px"><code>yellow_white</code> 系列</td><td style="padding:4px 8px">黄/白块多轮迭代</td><td style="padding:4px 8px;text-align:right">60–110</td><td style="padding:4px 8px;text-align:right">24k–44k</td></tr>
-          <tr><td style="padding:4px 8px"><code>hilserl_push_black_block_demos</code></td><td style="padding:4px 8px">HiL-SERL 推黑块</td><td style="padding:4px 8px;text-align:right">25</td><td style="padding:4px 8px;text-align:right">3,531</td></tr>
-        </table>
-        <p class="note" style="margin-top:10px">另有 eval / pi0·pi0.5 评测数据、reward classifier 数据集等；完整 36 个数据集均在 <code>/home/rxn/datasets</code>。</p>
-      </div>
-
-      <div class="panel reveal">
-        <h3 style="margin-top:0">🧠 训练产出（模型）</h3>
-        <p>在 2× RTX 3090（DDP / bf16 / 梯度检查点）上完成的真实训练 run，checkpoint 目录见 <code>/home/rxn/lerobot/outputs/train</code> 与 <code>lerobot/Evo-RL/outputs/*</code>。</p>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div>
-            <div style="font-size:13px;font-weight:700;color:#111a2e;margin-bottom:6px">SmolVLA（~450M）</div>
-            <div class="tags"><span class="tag b">stack_3blocks_white_blue_black</span><span class="tag b">stack_3blocks_3cam</span><span class="tag b">bimanual_stack_bowls</span><span class="tag b">bimanual_4cam_handover</span><span class="tag b">blue_block_yellow_tray</span></div>
-          </div>
-          <div>
-            <div style="font-size:13px;font-weight:700;color:#111a2e;margin-bottom:6px">π0 / π0.5</div>
-            <div class="tags"><span class="tag g">pi05_blue_block_yellow_tray（10k/20k）</span><span class="tag g">pi05_yellow_white_base3（40k）</span><span class="tag g">pi05_110k</span><span class="tag g">pi0_stack_3blocks_3cam（H100 · 80k）</span></div>
-          </div>
-          <div>
-            <div style="font-size:13px;font-weight:700;color:#111a2e;margin-bottom:6px">Cosmos3-Edge WAM（1×H100）</div>
-            <div class="tags"><span class="tag g">stack3cam_wam Vision SFT（I2V 已产出）</span><span class="tag g">Action-policy 实验文档</span></div>
-          </div>
-          <div>
-            <div style="font-size:13px;font-weight:700;color:#111a2e;margin-bottom:6px">Evo-RL / ACP（真机 RL 闭环）</div>
-            <div class="tags"><span class="tag g">smolvla_acp_bowls_tray_3cam v1/v2/v3</span><span class="tag g">pistar06 value v1/v2/v3</span></div>
-          </div>
-          <div>
-            <div style="font-size:13px;font-weight:700;color:#111a2e;margin-bottom:6px">GR00T · HiL-SERL · Reward</div>
-            <div class="tags"><span class="tag o">groot_so101</span><span class="tag o">hilserl_pick_place</span><span class="tag o">hilserl_push_black_block</span><span class="tag o">reward_classifier ×2</span></div>
-          </div>
-        </div>
-        <div style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px">
-          <div style="font-size:13px;font-weight:700;color:#111a2e;margin-bottom:4px">🤗 Hugging Face · <a href="https://huggingface.co/upna" target="_blank">huggingface.co/upna ↗</a></div>
-          <div style="font-size:12.5px;color:var(--muted);margin-bottom:8px">4 个模型 · 13 个数据集（LeRobot 真机数据，全部可下载复现）</div>
-          <div style="font-size:12.5px;font-weight:600;color:#33415c;margin-bottom:5px">模型</div>
-          <div class="tags" style="margin-bottom:10px">
-            <span class="tag g"><a href="https://huggingface.co/upna/pi05_stack_white_blue_black" target="_blank">pi05_stack_white_blue_black</a></span>
-            <span class="tag g"><a href="https://huggingface.co/upna/pi0_stack_white_blue_black_040000" target="_blank">pi0_stack_..._040000</a></span>
-            <span class="tag g"><a href="https://huggingface.co/upna/pi0_stack_white_blue_black_3cam_060000" target="_blank">pi0_3cam_060000</a></span>
-            <span class="tag g"><a href="https://huggingface.co/upna/pi0_stack_white_blue_black_3cam_080000" target="_blank">pi0_3cam_080000</a></span>
-          </div>
-          <div style="font-size:12.5px;font-weight:600;color:#33415c;margin-bottom:5px">数据集</div>
-          <div class="tags">
-            <span class="tag b"><a href="https://huggingface.co/datasets/upna/bimanual_stack_bowls" target="_blank">bimanual_stack_bowls</a></span>
-            <span class="tag b"><a href="https://huggingface.co/datasets/upna/bimanual-pass-double-sided-tape-roll" target="_blank">bimanual-pass-tape</a></span>
-            <span class="tag b"><a href="https://huggingface.co/datasets/upna/stack_white_blue_black" target="_blank">stack_white_blue_black</a></span>
-            <span class="tag b"><a href="https://huggingface.co/datasets/upna/stack_3blocks_white_blue_black_3cam" target="_blank">stack_3blocks_3cam</a></span>
-            <span class="tag b"><a href="https://huggingface.co/datasets/upna/pickup_blue_block_into_the_yellow_tray" target="_blank">pickup_blue_block</a></span>
-            <span class="tag b"><a href="https://huggingface.co/datasets/upna/realrobot-experiments" target="_blank">realrobot-experiments</a></span>
-            <span class="tag b"><a href="https://huggingface.co/datasets/upna/evo_rl_snacks_tray_stack_bowls_plate" target="_blank">evo_rl_snacks_tray</a></span>
-            <span class="tag b"><a href="https://huggingface.co/datasets/upna/bimanual_handover" target="_blank">bimanual_handover</a></span>
-            <span class="tag b"><a href="https://huggingface.co/datasets/upna/realrobot-benchmark" target="_blank">realrobot-benchmark</a></span>
-            <span class="tag b"><a href="https://huggingface.co/datasets/upna/HIL-ENRL-experiment" target="_blank">HIL-ENRL-experiment</a></span>
-            <span class="tag b"><a href="https://huggingface.co/datasets/upna/garlic_data" target="_blank">garlic_data</a></span>
-            <span class="tag b"><a href="https://huggingface.co/datasets/upna/pick_single_snack_data" target="_blank">pick_single_snack</a></span>
-            <span class="tag b"><a href="https://huggingface.co/datasets/upna/collect_items" target="_blank">collect_items</a></span>
-          </div>
+          <div class="visual-note note-left"><b>12-DoF</b><span>双臂真机</span></div>
+          <div class="visual-note note-right"><b>300–370 ms</b><span>RTC / chunk</span></div>
         </div>
       </div>
 
-    </div>
-  </section>
+      <div class="hero-proof" aria-label="作品集关键数据">
+        <article><strong>36</strong><span>真机数据集</span></article>
+        <article><strong>2,843</strong><span>episodes</span></article>
+        <article><strong>1.935M</strong><span>采集帧</span></article>
+        <article><strong>13+</strong><span>完整实验项目</span></article>
+      </div>
+    </section>
 
-  <!-- ===== 演示 ===== -->
-  <section id="videos">
-    <div class="eyebrow">Demos</div>
-    <h2 class="sec">真机评测演示</h2>
-    <div class="vids">
-      <div class="vid reveal">
-        <div class="play">▶</div>
-        <video controls preload="metadata" src="../media/3_blocks_stack_3cam.mp4"></video>
-        <div class="cap"><b>🧊 叠方块（白→蓝→黑）· 3 相机</b><span>SmolVLA 真机评测，130k 按序成功叠 3 层。</span></div>
+    <section class="section field-section" id="field">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><span>01</span> FIELD NOTES / NEW</p>
+          <h2>先看机器人真的动起来。</h2>
+        </div>
+        <p>四段近期现场记录：灵巧手策略 rollout、人手动作映射、真实环境数据采集和桌面机械臂抓取。视频均采用 H.264，桌面端和移动端可直接播放。</p>
       </div>
-      <div class="vid reveal">
-        <div class="play">▶</div>
-        <video controls preload="metadata" src="../media/3_blocks_stack_2cam.mp4"></video>
-        <div class="cap"><b>🧊 叠方块（白→蓝→黑）· 2 相机</b><span>SmolVLA 真机评测视频。</span></div>
-      </div>
-      <div class="vid reveal">
-        <div class="play">▶</div>
-        <video controls preload="metadata" src="../media/eval_stack_bowls.mp4"></video>
-        <div class="cap"><b>🥣 双臂叠碗（黄→棕→白）</b><span>ckpt 120k 真机评测（约 46 s），非正式 SR 2/3。</span></div>
-      </div>
-      <div class="vid reveal">
-        <div class="play">▶</div>
-        <video controls preload="metadata" src="../media/eval_pass_tape.mp4"></video>
-        <div class="cap"><b>🤝 双臂交接双面胶（pass）</b><span>抓取 → 递臂 → 放黄盘，ckpt 060000 真机评测。</span></div>
-      </div>
-    </div>
-    <h3 style="margin:24px 0 6px;color:#1e40af">📈 Evo-RL Value overlay 对比（准确 vs 假进度）</h3>
-    <p style="font-size:13.5px;color:#3d4a63;margin:0 0 8px">V(s) 曲线与真机 rollout 视频对齐，验证价值函数是否准确反映任务进度：</p>
-    <div class="vids">
-      <div class="vid reveal">
-        <div class="play">▶</div>
-        <video controls preload="metadata" src="../media/value_overlay_v3_100k_with_tag.mp4"></video>
-        <div class="cap"><b>例 1 · v3 100k with tag —— 大体准确</b><span>value mean ≈ -0.16，末段 V 从 -0.39 升至 -0.09；蓝色纸巾确实进入黄盘，V 抬升与可见进度一致（口红仍在桌上、V 偏高，仍残留一定乐观）。</span></div>
-      </div>
-      <div class="vid reveal">
-        <div class="play">▶</div>
-        <video controls preload="metadata" src="../media/value_overlay_v2_120k_with_tag.mp4"></video>
-        <div class="cap"><b>例 2 · v2 120k with tag —— 假进度（不准确）</b><span>value mean ≈ -0.37，末段 V 从 -0.38 抬升到 -0.22，但人眼真值：黄盘空、口红/纸巾均未完成 → V 对 grasp / 完成状态不敏感，计算偏乐观。</span></div>
-      </div>
-    </div>
-    <p class="note" style="margin-top:10px">判断方法：视频时间轴、V(t)、夹爪开合、‖a−s‖ 与人工标注的子任务成败四路对齐；曲线好看 ≠ 任务完成。</p>
-    <h3 style="margin:24px 0 6px;color:#1e40af">🌌 Cosmos3-Edge Vision SFT · I2V 生成对比（10 iter vs 500 iter）</h3>
-    <p style="font-size:13.5px;color:#3d4a63;margin:0 0 8px">Image-to-Video 预测 vs 真机 GT，展示世界模型后训练进展：</p>
-    <div class="vids">
-      <div class="vid reveal">
-        <div class="play">▶</div>
-        <video controls preload="metadata" src="../media/cosmos_pred_vs_gt_2s.mp4"></video>
-        <div class="cap"><b>500 iter · PRED vs GT 并排（held-out ep111）</b><span>左 PRED / 右 GT；ep111 未参与训练；场景身份更稳，但仍难完整复现抓取/叠放时序。</span></div>
-      </div>
-      <div class="vid reveal">
-        <div class="play">▶</div>
-        <video controls preload="metadata" src="../media/cosmos_pred_i2v_vision_smoke.mp4"></video>
-        <div class="cap"><b>10 iter（smoke）· PRED（ep119）</b><span>仅验证 I2V 管线跑通，不作为能力证据。</span></div>
-      </div>
-      <div class="vid reveal">
-        <div class="play">▶</div>
-        <video controls preload="metadata" src="../media/cosmos_pred_i2v_heldout_ep111.mp4"></video>
-        <div class="cap"><b>500 iter · PRED（held-out ep111）</b><span>49 帧 / 24fps，832×480，条件为 ep111 front 首帧。</span></div>
-      </div>
-      <div class="vid reveal">
-        <div class="play">▶</div>
-        <video controls preload="metadata" src="../media/cosmos_gt_front_2s.mp4"></video>
-        <div class="cap"><b>500 iter · GT 真机（ep111）</b><span>同 episode front 对齐约 2s。</span></div>
-      </div>
-    </div>
-    <p class="note" style="margin-top:10px">文档：<a href="https://github.com/upnana/cosmos-edge-lab/blob/main/docs/VISION_500_HELDOUT_I2V.md" target="_blank">VISION_500_HELDOUT_I2V.md</a> · <a href="https://github.com/upnana/cosmos-edge-lab/blob/main/docs/VISION_SMOKE_EXPORT_I2V.md" target="_blank">VISION_SMOKE_EXPORT_I2V.md</a>（GIF 与 8s 长版见仓库内）</p>
-    <h3 style="margin:24px 0 6px;color:#1e40af">🤖 Cosmos3-Edge Action-Policy WAM · held-out ep022（1s / 3s / 8s）</h3>
-    <p style="font-size:13.5px;color:#3d4a63;margin:0 0 8px">Action 预测与 GT 真机并排（GT | WAM | FD）：job <code>stack3cam_action_policy_edge_2000 · iter 2000</code>，front|wrist @256 / 30fps / auto-motion；评测 episodes 3 / 22 / 47 / 69 / 99，这里展示 ep022。</p>
-    <div class="vids">
-      <div class="vid reveal">
-        <div class="play">▶</div>
-        <video controls preload="metadata" src="../media/cosmos_action_ep022_1s.mp4"></video>
-        <div class="cap"><b>1s（chunk 32）· ep022</b><span>Action L1 9.19°（norm 0.442）· WAM 19.1 dB · FD 19.0 dB</span></div>
-      </div>
-      <div class="vid reveal">
-        <div class="play">▶</div>
-        <video controls preload="metadata" src="../media/cosmos_action_ep022_3s.mp4"></video>
-        <div class="cap"><b>3s（chunk 96）· ep022</b><span>Action L1 28.17°（norm 1.037）· WAM 16.8 dB · FD 17.8 dB</span></div>
-      </div>
-      <div class="vid reveal">
-        <div class="play">▶</div>
-        <video controls preload="metadata" src="../media/cosmos_action_ep022_8s.mp4"></video>
-        <div class="cap"><b>8s（chunk 240）· ep022</b><span>Action L1 18.20°（norm 0.756）· WAM 14.1 dB · FD 14.1 dB</span></div>
-      </div>
-    </div>
-    <p class="note" style="margin-top:10px">文档：<a href="https://github.com/upnana/cosmos-edge-lab/blob/main/docs/ACTION_POLICY_WAM_MORE.md" target="_blank">ACTION_POLICY_WAM_MORE.md</a>（各 duration 均值：1s L1 14.41°/norm 0.612 / WAM 17.8 / FD 17.9 · 3s 22.21°/0.855 / 16.9 / 17.1 · 8s 20.23°/0.795 / 15.1 / 15.1）</p>
-    <h3 style="margin:24px 0 6px;color:#1e40af">🤗 Hugging Face · realrobot-experiments 真机评测视频</h3>
-    <p style="font-size:13.5px;color:#3d4a63;margin:0 0 8px">多模型（SmolVLA / π0.5 / ACT / GR00T）× SO101 真机评测，覆盖成功案例与鲁棒性实验：</p>
-    <div class="tags" style="margin-bottom:12px">
-      <span class="tag g">成功案例</span>
-      <span class="tag o">背景迁移</span>
-      <span class="tag o">物体位姿泛化</span>
-      <span class="tag o">位置泛化</span>
-      <span class="tag o">语言不匹配</span>
-    </div>
-    <div class="vids">
-      <div class="vid">
-        <video controls preload="metadata" src="../media/hf_smoalvla_blue_block_pick_success.mp4"></video>
-        <div class="cap"><b>SmolVLA · 蓝块入黄盘（success）</b><span>89ep / 22epoch 模型，真机抓取成功。</span></div>
-      </div>
-      <div class="vid">
-        <video controls preload="metadata" src="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/pi05_50eposide_30%20epoch_front_view_task_pickup_white_block_into_yellow_tray.mp4"></video>
-        <div class="cap"><b>π0.5 · 白块入黄盘（前视）</b><span>50ep / 30epoch 模型，前视相机视角。</span></div>
-      </div>
-      <div class="vid">
-        <video controls preload="metadata" src="../media/hf_act_pickup_garlic_failure.mp4"></video>
-        <div class="cap"><b>ACT · 大蒜入容器（failure）</b><span>失败案例对照。</span></div>
-      </div>
-      <div class="vid">
-        <video controls preload="metadata" src="../media/hf_pi05_pickupitems_failure_case.mp4"></video>
-        <div class="cap"><b>π0.5 · 多物抓取（failure）</b><span>失败案例对照。</span></div>
-      </div>
-    </div>
-    <p class="note" style="margin-top:10px">完整 9 段视频（原址 huggingface.co/datasets/upna/realrobot-experiments；HEVC 原片已转 H.264 本地托管保证浏览器可播）：
-      <a href="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/act-pickup_snack_success.mp4" target="_blank">ACT 零食入碗(success)</a> ·
-      <a href="../media/hf_act_pickup_garlic_failure.mp4" target="_blank">ACT 大蒜(failure)</a> ·
-      <a href="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/pi05_50eposide_30%20epoch_front_view_task_pickup_white_block_into_yellow_tray.mp4" target="_blank">π0.5 白块(前视)</a> ·
-      <a href="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/pi05_50eposide_30%20epoch_wrist_view_task_pickup_white_block_into_yellow_tray.mp4" target="_blank">π0.5 白块(腕部)</a> ·
-      <a href="../media/hf_pi05_pickupitems_failure_case.mp4" target="_blank">π0.5 多物(failure)</a> ·
-      <a href="../media/hf_smoalvla_blue_block_pick_success.mp4" target="_blank">SmolVLA 蓝块(success)</a> ·
-      <a href="../media/hf_smolvla_50eposide_10_epoch_task_pickup_white_block_into_yellow_tray.mp4" target="_blank">SmolVLA 白块</a> ·
-      <a href="../media/hf_smolvla_50eposide_10%20epoch_task_pickup_white_block_into_yellow_tray%281%29.mp4" target="_blank">SmolVLA 白块(2)</a> ·
-      <a href="https://hf-mirror.com/datasets/upna/realrobot-experiments/resolve/main/smolvla_89episode_22epoch_pickup_blue_block_into_yellow_tray.mp4" target="_blank">SmolVLA 蓝块(89ep)</a></p>
-    <p class="note">本地录屏另有 <a href="https://upnana.github.io/smolvla_stack_blocks-white_blue_black/eval.html" target="_blank">叠方块网页版评测页</a> 可在线观看。</p>
-  </section>
 
-  <!-- ===== 技能 ===== -->
-  <section id="stack">
-    <div class="eyebrow">Stack</div>
-    <h2 class="sec">技术栈</h2>
-    <div class="panel reveal">
-      <p>近两个月聚焦<b>具身智能 / 机器人学习</b>的端到端实验：在双臂 SO101（12-DoF，30 Hz）真机上完成「数据采集 → 模型训练 → 真机闭环评测」全流程。</p>
-      <div class="tags">
-        <span class="tag b">Python / PyTorch / Accelerate</span>
-        <span class="tag b">LeRobot · value-train / value-infer</span>
-        <span class="tag g">SmolVLA（~450M）· π0 · π0.5</span>
-        <span class="tag g">Evo-RL ACP · pistar06 Value</span>
-        <span class="tag g">Cosmos3-Edge WAM · Isaac Sim 6.0</span>
-        <span class="tag o">DDP · bf16 · 2×RTX 3090</span>
-        <span class="tag o">真机 12-DoF 双臂 · HITL 迭代 · 4 相机</span>
-        <span class="tag o">RDK S600 边缘部署 · 离线推理</span>
-        <span class="tag c">GRPO · RLHF · 多模态 VLM</span>
-        <span class="tag c">Shell · Git · GitHub Pages</span>
+      <div class="latest-grid">
+        <article class="field-card latest-card reveal">
+          <div class="media-shell landscape">
+            <video controls playsinline preload="metadata" poster="assets/posters/pi05-amazing-hand.jpg">
+              <source src="../media/pi05-amazing-hand.mp4" type="video/mp4">
+            </video>
+            <span class="media-index">NEW / POLICY</span>
+          </div>
+          <div class="field-copy">
+            <div>
+              <p class="card-kicker">π0.5 × AMAZINGHAND</p>
+              <h3>多物体桌面场景真机 Rollout</h3>
+            </div>
+            <p>五指灵巧手与机械臂在多物体场景中执行连续策略动作，展示 π0.5 从视觉观测到真机控制的完整运行过程。</p>
+          </div>
+        </article>
+
+        <article class="field-card latest-card reveal">
+          <div class="media-shell landscape">
+            <video controls playsinline preload="metadata" poster="assets/posters/amazing-hand.jpg">
+              <source src="../media/amazing-hand-teleoperation.mp4" type="video/mp4">
+            </video>
+            <span class="media-index">NEW / RETARGETING</span>
+          </div>
+          <div class="field-copy">
+            <div>
+              <p class="card-kicker">AMAZINGHAND · LIVE CONTROL</p>
+              <h3>人手示范与五指动作同步</h3>
+            </div>
+            <p>现场展示人手开合和组合手势与机器人五指响应，为灵巧操作的遥控演示与后续数据采集提供直观入口。</p>
+          </div>
+        </article>
       </div>
-      <p class="note" style="margin-top:14px">全部项目均为本人真实实验沉淀：README 含可复现脚本、数据集统计与真机评测记录。GitHub：<a href="https://github.com/upnana" target="_blank">github.com/upnana</a>（228 个公开仓库）。</p>
-    </div>
-  </section>
 
-</main>
+      <div class="field-divider"><span>MORE PHYSICAL EXPERIMENTS</span></div>
 
-<button class="top-btn" id="topBtn" aria-label="回到顶部">↑</button>
+      <div class="field-grid">
+        <article class="field-card field-card-wide reveal">
+          <div class="media-shell landscape">
+            <video controls playsinline preload="metadata" poster="assets/posters/openarm.jpg">
+              <source src="../media/openarm-data-collection.mp4" type="video/mp4">
+            </video>
+            <span class="media-index">01 / DATA</span>
+          </div>
+          <div class="field-copy">
+            <div>
+              <p class="card-kicker">OPENARM · DATA COLLECTION</p>
+              <h3>真机数据采集 / 现场记录</h3>
+            </div>
+            <p>把真实场景、操作者意图与机器人状态转化为可训练轨迹——所有策略能力都从可靠数据开始。</p>
+          </div>
+        </article>
 
-<footer>0112 · 旧版存档 · 具身智能 / 机器人学习作品集 · 2026.07–08 · <a href="https://github.com/upnana" target="_blank">GitHub ↗</a> · <a href="https://huggingface.co/upna" target="_blank">Hugging Face ↗</a></footer>
+        <article class="field-card field-card-tall reveal">
+          <div class="media-shell portrait">
+            <video controls playsinline preload="metadata" poster="assets/posters/rebot.jpg">
+              <source src="../media/rebot-601-rs.mp4" type="video/mp4">
+            </video>
+            <span class="media-index">02 / ROLLOUT</span>
+          </div>
+          <div class="field-copy">
+            <div>
+              <p class="card-kicker">REBOT-601-RS</p>
+              <h3>桌面抓取与放置</h3>
+            </div>
+            <p>单臂真机抓取蓝色方块，展示从观测到动作执行的完整任务过程。</p>
+          </div>
+        </article>
+      </div>
+    </section>
 
-<script>
-  // Nav: 滚动后切换为毛玻璃白底
-  var nav = document.getElementById('nav');
-  var topBtn = document.getElementById('topBtn');
-  function onScroll() {
-    var y = window.scrollY;
-    nav.classList.toggle('scrolled', y > 60);
-    topBtn.classList.toggle('show', y > 500);
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-  topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    <section class="section featured-section" id="featured">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><span>02</span> SELECTED WORK</p>
+          <h2>四个项目，覆盖四种难题。</h2>
+        </div>
+        <p>不只展示“跑通了”，也展示对照实验、失败诊断、量化指标和可复现工程。</p>
+      </div>
 
-  // 滚动渐入
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-    });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
-</script>
+      <div class="project-bento">
+        <article class="project-card project-card-lead reveal">
+          <div class="project-topline"><span>RL / REAL ROBOT</span><b>01</b></div>
+          <h3>Evo-RL Bowls & Tray</h3>
+          <p>双臂 SO101 真机 Evo-RL / ACP 端到端闭环：HITL 采集 → value 训练 → value infer → 策略训练 → rollout，完成三轮数据迭代（150 → 231 → 287 条）。</p>
+          <div class="result-box"><span>关键结果</span>Value overlay 定量识别“乐观偏差 / 假进度”，并完成 ACP tag A/B 对照。</div>
+          <div class="chip-row"><span>LeRobot</span><span>Evo-RL</span><span>HITL</span><span>Value</span></div>
+          <div class="card-links">
+            <a href="https://github.com/upnana/Evo-RL_bowls_tray" target="_blank" rel="noreferrer">代码仓库 ↗</a>
+            <a href="https://github.com/upnana/Evo-RL_bowls_tray/blob/main/daima/Recap.md" target="_blank" rel="noreferrer">复盘文档 ↗</a>
+          </div>
+        </article>
 
+        <article class="project-card reveal">
+          <div class="project-topline"><span>WORLD MODEL</span><b>02</b></div>
+          <h3>Cosmos3-Edge WAM</h3>
+          <p>SO-101 / 3-camera 数据适配、Vision SFT 与 Action-policy WAM；在 1×H100 上完成 held-out 多时长评测。</p>
+          <div class="metric-line"><strong>1 / 3 / 8s</strong><span>GT · WAM · FD 并排评测</span></div>
+          <div class="chip-row"><span>Vision SFT</span><span>I2V</span><span>H100</span></div>
+          <div class="card-links"><a href="https://github.com/upnana/cosmos-edge-lab" target="_blank" rel="noreferrer">项目详情 ↗</a></div>
+        </article>
+
+        <article class="project-card reveal">
+          <div class="project-topline"><span>VLA / MANIPULATION</span><b>03</b></div>
+          <h3>SmolVLA Stack Blocks</h3>
+          <p>双臂 SO101 叠方块全流程：遥操作采集、训练、推理与真机评测。</p>
+          <div class="metric-line"><strong>130k</strong><span>checkpoint 成功完成三层叠放</span></div>
+          <div class="chip-row"><span>SmolVLA</span><span>3 Cameras</span><span>Real Robot</span></div>
+          <div class="card-links">
+            <a href="https://github.com/upnana/smolvla_stack_blocks-white_blue_black" target="_blank" rel="noreferrer">代码仓库 ↗</a>
+            <a href="https://upnana.github.io/smolvla_stack_blocks-white_blue_black/eval.html" target="_blank" rel="noreferrer">在线评测 ↗</a>
+          </div>
+        </article>
+
+        <article class="project-card project-card-accent reveal">
+          <div class="project-topline"><span>EDGE DEPLOYMENT</span><b>04</b></div>
+          <h3>π0 → RDK S600</h3>
+          <p>从 LeRobot 训练、模型量化到 RDK S600 边缘推理，沉淀完整复现步骤、工具链适配与踩坑记录。</p>
+          <div class="metric-line"><strong>2.3B</strong><span>PaliGemma + action expert</span></div>
+          <div class="chip-row"><span>π0</span><span>Quantization</span><span>Edge AI</span></div>
+          <div class="card-links"><a href="https://github.com/upnana/lerobot-pi0-rdk-s600-deploy" target="_blank" rel="noreferrer">部署教程 ↗</a></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section pipeline-section" id="pipeline">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><span>03</span> END-TO-END</p>
+          <h2>不是单点 Demo，是完整实验闭环。</h2>
+        </div>
+        <p>从数据质量到部署延迟，每一层都能落到实际脚本、训练记录、评测视频和失败案例。</p>
+      </div>
+
+      <div class="pipeline reveal">
+        <article><span class="pipeline-no">01</span><div><small>COLLECT</small><h3>真机采集</h3><p>SO101 双臂 · 4 相机 · 30 FPS · 遥操作 / HITL</p></div></article>
+        <i aria-hidden="true">→</i>
+        <article><span class="pipeline-no">02</span><div><small>TRAIN</small><h3>策略训练</h3><p>SmolVLA · π0 / π0.5 · Evo-RL · bf16 / DDP</p></div></article>
+        <i aria-hidden="true">→</i>
+        <article><span class="pipeline-no">03</span><div><small>EVALUATE</small><h3>真机评测</h3><p>成功率 · Value overlay · held-out · 对照与失败分析</p></div></article>
+        <i aria-hidden="true">→</i>
+        <article><span class="pipeline-no">04</span><div><small>DEPLOY</small><h3>边缘部署</h3><p>量化 · RDK S600 · RTC 推理 · 工具链适配</p></div></article>
+      </div>
+
+      <div class="evidence-grid">
+        <article class="evidence-card reveal">
+          <p class="card-kicker">DATA ASSETS</p>
+          <h3><strong>36</strong> 个数据集，<strong>193.5 万</strong>帧</h3>
+          <p>全部为 LeRobot 格式真机遥操作 / HITL 数据；13 个数据集已同步 Hugging Face，可直接下载复现。</p>
+          <div class="data-table-wrap">
+            <table>
+              <thead><tr><th>数据集 / 任务</th><th>EP</th><th>Frames</th></tr></thead>
+              <tbody>
+                <tr><td>Evo-RL bowls / tray v3</td><td>287</td><td>262,484</td></tr>
+                <tr><td>Stack 3 blocks</td><td>316</td><td>185,968</td></tr>
+                <tr><td>Bimanual stack bowls</td><td>200</td><td>98,616</td></tr>
+                <tr><td>Stack 3 blocks / 3 cam</td><td>120</td><td>79,251</td></tr>
+                <tr><td>Bimanual handover / 4 cam</td><td>89</td><td>47,074</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="evidence-card training-card reveal">
+          <p class="card-kicker">TRAINING OUTPUTS</p>
+          <h3>多模型家族，真实训练产出</h3>
+          <div class="model-list">
+            <div><b>SmolVLA</b><span>叠方块 / 叠碗 / 双臂交接 / 抓取</span></div>
+            <div><b>π0 / π0.5</b><span>2×3090 与 H100 训练 · 3-camera 对照</span></div>
+            <div><b>Cosmos3-Edge</b><span>Vision SFT · Action-policy WAM</span></div>
+            <div><b>Evo-RL / ACP</b><span>Value v1–v3 · 真机 RL 迭代闭环</span></div>
+            <div><b>GRPO / VLM</b><span>ChartQA 0.026 → 0.864</span></div>
+          </div>
+          <a class="text-link" href="https://huggingface.co/upna" target="_blank" rel="noreferrer">查看 Hugging Face 模型与数据集 ↗</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section all-projects-section" id="projects">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><span>04</span> PROJECT INDEX</p>
+          <h2>更多工程与研究复现。</h2>
+        </div>
+        <p>按“任务 / 方法 / 结果”压缩呈现；点击项目名可进入仓库查看脚本、README 与实验记录。</p>
+      </div>
+
+      <div class="project-index reveal">
+        <a href="https://github.com/upnana/pi0_stack_blocks_white_blue_black_3cam" target="_blank" rel="noreferrer"><span>01</span><b>π0 · 3-camera stack blocks</b><em>120 ep / 79,251 frames · H100 80k</em><i>↗</i></a>
+        <a href="https://github.com/upnana/smolvla_stack_blocks_white_blue_black_3cam" target="_blank" rel="noreferrer"><span>02</span><b>SmolVLA · 3-camera stack blocks</b><em>同数据对照 · 真机 SR ~4/5</em><i>↗</i></a>
+        <a href="https://github.com/upnana/stack_bowls" target="_blank" rel="noreferrer"><span>03</span><b>Bimanual stack bowls</b><em>200 ep · ckpt 120k · SR 2/3</em><i>↗</i></a>
+        <a href="https://github.com/upnana/pass_tape" target="_blank" rel="noreferrer"><span>04</span><b>Bimanual tape handover</b><em>89 ep / 47,074 frames</em><i>↗</i></a>
+        <a href="https://github.com/upnana/isaac-sim-so101" target="_blank" rel="noreferrer"><span>05</span><b>Isaac Sim 6.0 · SO101</b><em>URDF · 场景 · 关节控制 · Sim2Real</em><i>↗</i></a>
+        <a href="https://github.com/upnana/alohamini_lab" target="_blank" rel="noreferrer"><span>06</span><b>π0.5 × AlohaMini</b><em>遥操作 · 推理 · 实验结论</em><i>↗</i></a>
+        <a href="https://github.com/upnana/lerobot_lab" target="_blank" rel="noreferrer"><span>07</span><b>LeRobot Lab</b><em>采集 / 训练 / 推理基础设施</em><i>↗</i></a>
+        <a href="https://github.com/upnana/le-wm" target="_blank" rel="noreferrer"><span>08</span><b>LeWorldModel / JEPA</b><em>官方代码研读与复现</em><i>↗</i></a>
+        <a href="https://github.com/upnana/chartqa-grpo-refocus" target="_blank" rel="noreferrer"><span>09</span><b>ChartQA · GRPO Refocus</b><em>Qwen2.5-VL · Δ +0.838</em><i>↗</i></a>
+      </div>
+    </section>
+
+    <section class="section archive-section" id="archive">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><span>05</span> VIDEO ARCHIVE</p>
+          <h2>真机评测与诊断档案。</h2>
+        </div>
+        <p>成功案例和失败案例同样保留。点击任意卡片会在沉浸式播放器中打开，不让十几段视频拖慢首屏。</p>
+      </div>
+
+      <div class="filter-row reveal" role="group" aria-label="筛选演示视频">
+        <button type="button" class="filter-button is-active" data-filter="all">全部</button>
+        <button type="button" class="filter-button" data-filter="robot">真机任务</button>
+        <button type="button" class="filter-button" data-filter="hand">灵巧手</button>
+        <button type="button" class="filter-button" data-filter="value">Value 诊断</button>
+        <button type="button" class="filter-button" data-filter="world">世界模型</button>
+        <button type="button" class="filter-button" data-filter="failure">失败案例</button>
+      </div>
+
+      <div class="demo-grid" id="demoGrid">
+        <button class="demo-card reveal" type="button" data-category="robot hand" data-video="../media/pi05-amazing-hand.mp4" data-title="π0.5 × AmazingHand · 真机 Rollout" data-description="五指灵巧手与机械臂在多物体桌面场景中的策略运行记录。">
+          <span class="demo-code">HAND / 01</span><span class="demo-play">▶</span><b>π0.5 × AmazingHand</b><small>policy rollout · physical robot</small>
+        </button>
+        <button class="demo-card reveal" type="button" data-category="robot hand" data-video="../media/amazing-hand-teleoperation.mp4" data-title="AmazingHand · 人手动作映射" data-description="人手开合与组合手势对应机器人五指动作的现场演示。">
+          <span class="demo-code">HAND / 02</span><span class="demo-play">▶</span><b>五指动作同步</b><small>live control · hand retargeting</small>
+        </button>
+        <button class="demo-card reveal" type="button" data-category="robot" data-video="https://upnana.github.io/portfolio/media/3_blocks_stack_3cam.mp4" data-title="叠方块 · 3 相机" data-description="SmolVLA 130k，按序成功叠三层。">
+          <span class="demo-code">REAL / 01</span><span class="demo-play">▶</span><b>叠方块 · 3 相机</b><small>SmolVLA · 130k · success</small>
+        </button>
+        <button class="demo-card reveal" type="button" data-category="robot" data-video="https://upnana.github.io/portfolio/media/eval_stack_bowls.mp4" data-title="双臂叠碗" data-description="黄 → 棕 → 白，ckpt 120k 真机评测，非正式 SR 2/3。">
+          <span class="demo-code">REAL / 02</span><span class="demo-play">▶</span><b>双臂叠碗</b><small>SmolVLA · ckpt 120k · SR 2/3</small>
+        </button>
+        <button class="demo-card reveal" type="button" data-category="robot" data-video="https://upnana.github.io/portfolio/media/eval_pass_tape.mp4" data-title="双臂交接双面胶" data-description="抓取 → 递臂 → 放入黄盘，ckpt 060000。">
+          <span class="demo-code">REAL / 03</span><span class="demo-play">▶</span><b>双臂交接</b><small>抓取 → 递臂 → 放置</small>
+        </button>
+        <button class="demo-card reveal" type="button" data-category="robot" data-video="https://upnana.github.io/portfolio/media/3_blocks_stack_2cam.mp4" data-title="叠方块 · 2 相机" data-description="SmolVLA 双相机真机评测。">
+          <span class="demo-code">REAL / 04</span><span class="demo-play">▶</span><b>叠方块 · 2 相机</b><small>SmolVLA · physical rollout</small>
+        </button>
+
+        <button class="demo-card reveal" type="button" data-category="value" data-video="https://upnana.github.io/portfolio/media/value_overlay_v3_100k_with_tag.mp4" data-title="Value overlay · 准确案例" data-description="V(s) 抬升与可见任务进度基本一致，同时仍可观察到残留乐观偏差。">
+          <span class="demo-code">VALUE / 01</span><span class="demo-play">▶</span><b>Value overlay · 准确</b><small>v3 100k with tag</small>
+        </button>
+        <button class="demo-card demo-card-warning reveal" type="button" data-category="value failure" data-video="https://upnana.github.io/portfolio/media/value_overlay_v2_120k_with_tag.mp4" data-title="Value overlay · 假进度" data-description="黄盘为空且任务未完成，但价值函数仍上升；用于诊断 reward optimism。">
+          <span class="demo-code">VALUE / 02</span><span class="demo-play">▶</span><b>Value overlay · 假进度</b><small>failure analysis · optimistic V</small>
+        </button>
+
+        <button class="demo-card reveal" type="button" data-category="world" data-video="https://upnana.github.io/portfolio/media/cosmos_pred_vs_gt_2s.mp4" data-title="Cosmos3-Edge · PRED vs GT" data-description="500 iter，held-out ep111，世界模型预测与真机 GT 并排。">
+          <span class="demo-code">WORLD / 01</span><span class="demo-play">▶</span><b>I2V · PRED vs GT</b><small>500 iter · held-out ep111</small>
+        </button>
+        <button class="demo-card reveal" type="button" data-category="world" data-video="https://upnana.github.io/portfolio/media/cosmos_pred_i2v_vision_smoke.mp4" data-title="Vision SFT · 10 iter smoke" data-description="仅用于验证 I2V 管线跑通，不作为能力证据。">
+          <span class="demo-code">WORLD / 02</span><span class="demo-play">▶</span><b>Vision SFT · smoke</b><small>10 iter · pipeline check</small>
+        </button>
+        <button class="demo-card reveal" type="button" data-category="world" data-video="https://upnana.github.io/portfolio/media/cosmos_action_ep022_1s.mp4" data-title="Action-policy WAM · 1s" data-description="held-out ep022，GT | WAM | FD 并排；Action L1 9.19°。">
+          <span class="demo-code">WORLD / 03</span><span class="demo-play">▶</span><b>Action-policy · 1s</b><small>L1 9.19° · WAM 19.1 dB</small>
+        </button>
+        <button class="demo-card reveal" type="button" data-category="world" data-video="https://upnana.github.io/portfolio/media/cosmos_action_ep022_8s.mp4" data-title="Action-policy WAM · 8s" data-description="held-out ep022，8 秒动作预测与视觉 rollout 对齐。">
+          <span class="demo-code">WORLD / 04</span><span class="demo-play">▶</span><b>Action-policy · 8s</b><small>L1 18.20° · WAM 14.1 dB</small>
+        </button>
+
+        <button class="demo-card reveal" type="button" data-category="robot" data-video="https://upnana.github.io/portfolio/media/hf_smoalvla_blue_block_pick_success.mp4" data-title="SmolVLA · 蓝块入黄盘" data-description="89 episodes / 22 epoch 模型，真机抓取成功。">
+          <span class="demo-code">HF / 01</span><span class="demo-play">▶</span><b>蓝块入黄盘</b><small>SmolVLA · success</small>
+        </button>
+        <button class="demo-card demo-card-warning reveal" type="button" data-category="failure" data-video="https://upnana.github.io/portfolio/media/hf_act_pickup_garlic_failure.mp4" data-title="ACT · 大蒜抓取失败" data-description="失败样本保留，用于分析任务鲁棒性与训练分布边界。">
+          <span class="demo-code">FAIL / 01</span><span class="demo-play">▶</span><b>大蒜抓取失败</b><small>ACT · failure case</small>
+        </button>
+        <button class="demo-card demo-card-warning reveal" type="button" data-category="failure" data-video="https://upnana.github.io/portfolio/media/hf_pi05_pickupitems_failure_case.mp4" data-title="π0.5 · 多物抓取失败" data-description="多物场景失败案例，用于泛化与分布偏移分析。">
+          <span class="demo-code">FAIL / 02</span><span class="demo-play">▶</span><b>多物抓取失败</b><small>π0.5 · failure case</small>
+        </button>
+      </div>
+    </section>
+
+    <section class="section stack-section" id="stack">
+      <div class="stack-panel reveal">
+        <div>
+          <p class="eyebrow"><span>06</span> TOOLKIT</p>
+          <h2>面向真实机器人的技术栈。</h2>
+        </div>
+        <div class="stack-cloud" aria-label="技术栈列表">
+          <span>Python</span><span>PyTorch</span><span>LeRobot</span><span>Accelerate</span><span>SmolVLA</span><span>π0 / π0.5</span><span>Evo-RL / ACP</span><span>Cosmos3-Edge</span><span>Isaac Sim 6.0</span><span>DDP / bf16</span><span>H100 / RTX 3090</span><span>RDK S600</span><span>Shell / Git</span><span>Hugging Face</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact-section">
+      <div class="contact-card reveal">
+        <p class="eyebrow"><span>→</span> NEXT STEP</p>
+        <h2>正在寻找具身智能 /<br>Robot Learning 相关机会。</h2>
+        <p>这里的每一项都有代码、数据、训练记录或真机视频可以追溯。欢迎从任何一个项目开始深入。</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://github.com/upnana" target="_blank" rel="noreferrer">GitHub / upnana <span>↗</span></a>
+          <a class="button button-ghost" href="https://huggingface.co/upna" target="_blank" rel="noreferrer">Hugging Face / upna <span>↗</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div><span class="brand-mark">AI</span><p>EMBODIED AI / ROBOT LEARNING</p></div>
+    <p>真实实验 · 可复现工程 · <span id="year">2026</span></p>
+  </footer>
+
+  <dialog class="video-dialog" id="videoDialog" aria-labelledby="dialogTitle">
+    <button class="dialog-close" id="dialogClose" type="button" aria-label="关闭播放器">×</button>
+    <div class="dialog-media"><video id="dialogVideo" controls playsinline preload="metadata"></video></div>
+    <div class="dialog-copy"><p class="card-kicker">EXPERIMENT PLAYBACK</p><h3 id="dialogTitle"></h3><p id="dialogDescription"></p></div>
+  </dialog>
+
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
