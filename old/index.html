@@ -177,6 +177,20 @@
           <h3>Evo-RL Bowls & Tray</h3>
           <p>双臂 SO101 真机 Evo-RL / ACP 端到端闭环：HITL 采集 → value 训练 → value infer → 策略训练 → rollout，完成三轮数据迭代（150 → 231 → 287 条）。</p>
           <div class="result-box"><span>关键结果</span>Value overlay 定量识别“乐观偏差 / 假进度”，并完成 ACP tag A/B 对照。</div>
+          <div class="value-compare" aria-label="Value overlay 准确与假进度对比视频">
+            <figure class="value-clip">
+              <video controls playsinline preload="metadata" poster="assets/posters/value-accurate.jpg">
+                <source src="../media/value_overlay_v3_100k_with_tag.mp4" type="video/mp4">
+              </video>
+              <figcaption><span class="value-state accurate">ALIGNED</span><b>进度基本准确</b><small>v3 · 100k · with tag</small></figcaption>
+            </figure>
+            <figure class="value-clip">
+              <video controls playsinline preload="metadata" poster="assets/posters/value-fake-progress.jpg">
+                <source src="../media/value_overlay_v2_120k_with_tag.mp4" type="video/mp4">
+              </video>
+              <figcaption><span class="value-state optimistic">OPTIMISTIC</span><b>假进度 / 乐观偏差</b><small>v2 · 120k · with tag</small></figcaption>
+            </figure>
+          </div>
           <div class="chip-row"><span>LeRobot</span><span>Evo-RL</span><span>HITL</span><span>Value</span></div>
           <div class="card-links">
             <a href="https://github.com/upnana/Evo-RL_bowls_tray" target="_blank" rel="noreferrer">代码仓库 ↗</a>

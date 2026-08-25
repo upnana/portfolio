@@ -232,9 +232,21 @@ video { display: block; width: 100%; }
 .project-card h3 { margin: 54px 0 18px; font-size: clamp(25px, 3vw, 42px); line-height: 1.08; letter-spacing: -.045em; }
 .project-card:not(.project-card-lead) h3 { margin-top: 30px; font-size: clamp(23px,2.5vw,32px); }
 .project-card > p { margin: 0; max-width: 720px; color: var(--muted); font-size: 14px; }
-.project-card-lead > p { font-size: 16px; line-height: 1.85; }
+.project-card-lead h3 { margin-top: 34px; }
+.project-card-lead > p { font-size: 14px; line-height: 1.75; }
 .result-box { margin-top: 48px; padding: 22px; border-left: 2px solid var(--acid); color: #c8d1d7; background: rgba(202,255,72,.045); font-size: 14px; }
 .result-box span { display: block; margin-bottom: 6px; color: var(--acid); font: 650 9px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .13em; }
+.project-card-lead .result-box { margin-top: 22px; padding: 15px 17px; font-size: 12px; }
+.value-compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 18px; }
+.value-clip { margin: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: #080c10; }
+.value-clip video { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #030405; }
+.value-clip figcaption { display: grid; gap: 2px; padding: 9px 11px 11px; }
+.value-clip b { font-size: 11px; }
+.value-clip small { color: var(--dim); font-size: 8px; }
+.value-state { margin-bottom: 3px; font: 650 7px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .13em; }
+.value-state.accurate { color: var(--acid); }
+.value-state.optimistic { color: var(--orange); }
+.project-card-lead .chip-row { margin-top: 0; padding-top: 20px; }
 .metric-line { display: flex; align-items: baseline; gap: 15px; margin-top: 31px; }
 .metric-line strong { color: var(--acid); font: 650 28px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: -.05em; }
 .metric-line span { color: #7e8b95; font-size: 11px; }
@@ -420,3 +432,4 @@ td { color: #a5b0b8; }
 }
   .latest-grid { grid-template-columns: 1fr; }
   .latest-card .field-copy { min-height: 0; }
+  .value-compare { grid-template-columns: 1fr; }
