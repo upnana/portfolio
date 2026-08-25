@@ -221,11 +221,28 @@
 
         <article class="project-card project-card-accent reveal">
           <div class="project-topline"><span>EDGE DEPLOYMENT</span><b>04</b></div>
-          <h3>π0 → RDK S600</h3>
-          <p>从 LeRobot 训练、模型量化到 RDK S600 边缘推理，沉淀完整复现步骤、工具链适配与踩坑记录。</p>
-          <div class="metric-line"><strong>2.3B</strong><span>PaliGemma + action expert</span></div>
-          <div class="chip-row"><span>π0</span><span>Quantization</span><span>Edge AI</span></div>
-          <div class="card-links"><a href="https://github.com/upnana/lerobot-pi0-rdk-s600-deploy" target="_blank" rel="noreferrer">部署教程 ↗</a></div>
+          <div class="deployment-layout">
+            <div class="deployment-copy">
+              <h3>π0 → RDK S600</h3>
+              <p>从 LeRobot 训练、模型量化到 RDK S600 边缘推理，沉淀完整复现步骤、工具链适配与踩坑记录。</p>
+              <div class="metric-line"><strong>2.3B</strong><span>PaliGemma + action expert</span></div>
+              <div class="chip-row"><span>π0</span><span>Quantization</span><span>Edge AI</span></div>
+              <div class="card-links"><a href="https://github.com/upnana/lerobot-pi0-rdk-s600-deploy" target="_blank" rel="noreferrer">部署教程 ↗</a></div>
+            </div>
+            <figure class="deployment-demo">
+              <div class="deployment-video-shell">
+                <video controls playsinline preload="metadata" poster="assets/posters/rdk-s600-inference.jpg" aria-label="RDK S600 边缘部署推理演示">
+                  <source src="../media/rdk-s600-deployment-inference.mp4" type="video/mp4">
+                </video>
+                <span class="deployment-status"><i aria-hidden="true"></i> ON-DEVICE</span>
+              </div>
+              <figcaption>
+                <span>LIVE INFERENCE</span>
+                <b>RDK S600 真机部署现场</b>
+                <small>量化模型 · 边缘推理 · 机械臂执行</small>
+              </figcaption>
+            </figure>
+          </div>
         </article>
       </div>
     </section>
