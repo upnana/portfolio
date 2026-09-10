@@ -256,6 +256,8 @@ video { display: block; width: 100%; }
 .deployment-demo { align-self: stretch; margin: 0; overflow: hidden; border: 1px solid var(--line-strong); border-radius: 12px; background: #080d11; box-shadow: 0 24px 60px rgba(0,0,0,.28); }
 .deployment-video-shell { position: relative; display: grid; place-items: center; height: 340px; overflow: hidden; background: radial-gradient(circle at 50% 45%, rgba(100,216,255,.12), transparent 54%), repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 38px), #030608; }
 .deployment-video-shell video { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; background: transparent; }
+.mobile-manipulator-card { background: radial-gradient(circle at 92% 12%, rgba(202,255,72,.11), transparent 35%), linear-gradient(145deg, #111b1c, #0c1216 75%); }
+.mobile-video-shell { height: auto; aspect-ratio: 16 / 9; background: #030608; }
 .deployment-status { position: absolute; z-index: 2; top: 13px; left: 13px; display: flex; align-items: center; gap: 7px; padding: 7px 9px; border: 1px solid rgba(202,255,72,.3); border-radius: 4px; color: var(--acid); background: rgba(4,8,10,.72); backdrop-filter: blur(10px); font: 650 8px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .12em; pointer-events: none; }
 .deployment-status i { width: 6px; height: 6px; border-radius: 50%; background: var(--acid); box-shadow: 0 0 10px rgba(202,255,72,.8); }
 .deployment-demo figcaption { display: grid; grid-template-columns: auto 1fr; gap: 5px 16px; align-items: center; padding: 15px 17px 17px; }
