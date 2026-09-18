@@ -230,7 +230,8 @@ video { display: block; width: 100%; }
 .project-bento { display: grid; grid-template-columns: 1.12fr .88fr; gap: 18px; }
 .project-card { position: relative; min-height: 355px; padding: 30px; border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(145deg, rgba(18,25,32,.95), rgba(12,17,22,.98)); overflow: hidden; transition: transform .25s ease, border-color .25s ease; }
 .project-card:hover { transform: translateY(-4px); border-color: var(--line-strong); }
-.project-card-lead { grid-row: span 2; min-height: 728px; display: flex; flex-direction: column; padding: 38px; background: radial-gradient(circle at 100% 0, rgba(202,255,72,.11), transparent 40%), linear-gradient(145deg, #151d21, #0d1318 75%); }
+.project-card-lead { grid-column: 1; grid-row: 1; min-height: 728px; display: flex; flex-direction: column; padding: 38px; background: radial-gradient(circle at 100% 0, rgba(202,255,72,.11), transparent 40%), linear-gradient(145deg, #151d21, #0d1318 75%); }
+.project-card-cosmos { grid-column: 2; grid-row: 1 / span 2; }
 .project-card-accent { grid-column: 1 / -1; min-height: 480px; background: radial-gradient(circle at 95% 15%, rgba(100,216,255,.12), transparent 37%), linear-gradient(145deg, #141c23, #0d1318 75%); }
 .project-topline { display: flex; align-items: center; justify-content: space-between; color: var(--acid); font: 650 9px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .15em; }
 .project-topline b { color: #3e4b55; font-size: 20px; font-weight: 500; letter-spacing: -.04em; }
@@ -431,7 +432,8 @@ td { color: #a5b0b8; }
   .media-shell.portrait { height: 630px; min-height: 0; }
   .field-copy { grid-template-columns: 1fr; gap: 12px; }
   .project-bento { grid-template-columns: 1fr; }
-  .project-card-lead { grid-row: auto; min-height: 570px; padding: 30px; }
+  .project-card-lead, .project-card-cosmos { grid-column: auto; grid-row: auto; }
+  .project-card-lead { min-height: 570px; padding: 30px; }
   .project-card { min-height: 370px; }
   .cosmos-card-footer { align-items: flex-start; flex-direction: column; gap: 12px; }
   .cosmos-section-head, .cosmos-video-stack figcaption, .cosmos-policy figcaption { align-items: flex-start; flex-direction: column; gap: 3px; }
