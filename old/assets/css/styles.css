@@ -204,6 +204,7 @@ video { display: block; width: 100%; }
 
 .field-section { padding-top: 144px; }
 .latest-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-bottom: 34px; }
+.latest-card-wide { grid-column: 1 / -1; }
 .latest-card { border-color: rgba(202,255,72,.22); background: radial-gradient(circle at 100% 0, rgba(202,255,72,.08), transparent 38%), var(--surface); }
 .latest-card .field-copy { min-height: 174px; }
 .field-divider { display: flex; align-items: center; gap: 16px; margin: 0 0 20px; color: #55636e; font: 600 8px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .15em; }
@@ -418,6 +419,8 @@ td { color: #a5b0b8; }
   .note-right { right: -4px; top: 70px; }
   .visual-note { min-width: 120px; }
   .field-grid { display: block; }
+  .latest-grid { grid-template-columns: 1fr; }
+  .latest-card-wide { grid-column: auto; }
   .field-card + .field-card { margin-top: 18px; }
   .field-card-tall { display: block; }
   .media-shell.portrait { height: 630px; min-height: 0; }
@@ -466,6 +469,8 @@ td { color: #a5b0b8; }
   .contact-card { padding: 38px 24px; }
   .contact-card h2 { font-size: 39px; }
   .dialog-copy { padding-inline: 20px; }
+  .latest-card .field-copy { min-height: 0; }
+  .value-compare { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -473,6 +478,3 @@ td { color: #a5b0b8; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .reveal { opacity: 1; transform: none; }
 }
-  .latest-grid { grid-template-columns: 1fr; }
-  .latest-card .field-copy { min-height: 0; }
-  .value-compare { grid-template-columns: 1fr; }
