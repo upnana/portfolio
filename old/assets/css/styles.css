@@ -203,10 +203,14 @@ video { display: block; width: 100%; }
 .card-kicker { margin: 0 0 8px; color: var(--acid); font: 650 9px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .14em; }
 
 .field-section { padding-top: 144px; }
-.latest-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-bottom: 34px; }
-.latest-card-wide { grid-column: 1 / -1; }
+.latest-grid { display: grid; grid-template-columns: minmax(0, 1.22fr) minmax(300px, .78fr); grid-template-rows: repeat(2, auto); gap: 22px; margin-bottom: 34px; align-items: stretch; }
+.latest-card-left { grid-column: 1; }
+.latest-card-portrait { grid-column: 2; grid-row: 1 / span 2; }
 .latest-card { border-color: rgba(202,255,72,.22); background: radial-gradient(circle at 100% 0, rgba(202,255,72,.08), transparent 38%), var(--surface); }
 .latest-card .field-copy { min-height: 174px; }
+.latest-card-portrait .field-copy { grid-template-columns: 1fr; gap: 12px; min-height: 0; }
+.lekiwi-portrait { flex: 1; min-height: 0; display: grid; place-items: center; background: radial-gradient(circle at 50% 42%, rgba(202,255,72,.08), transparent 52%), #030405; }
+.lekiwi-portrait video { width: 100%; height: 100%; aspect-ratio: 9 / 16; object-fit: contain; }
 .field-divider { display: flex; align-items: center; gap: 16px; margin: 0 0 20px; color: #55636e; font: 600 8px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .15em; }
 .field-divider::before, .field-divider::after { content: ""; height: 1px; flex: 1; background: var(--line); }
 .field-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(330px, .55fr); gap: 22px; align-items: stretch; }
@@ -419,8 +423,9 @@ td { color: #a5b0b8; }
   .note-right { right: -4px; top: 70px; }
   .visual-note { min-width: 120px; }
   .field-grid { display: block; }
-  .latest-grid { grid-template-columns: 1fr; }
-  .latest-card-wide { grid-column: auto; }
+  .latest-grid { grid-template-columns: 1fr; grid-template-rows: none; }
+  .latest-card-left, .latest-card-portrait { grid-column: auto; grid-row: auto; }
+  .lekiwi-portrait { height: min(150vw, 720px); }
   .field-card + .field-card { margin-top: 18px; }
   .field-card-tall { display: block; }
   .media-shell.portrait { height: 630px; min-height: 0; }
