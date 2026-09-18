@@ -200,25 +200,46 @@
 
         <article class="project-card reveal">
           <div class="project-topline"><span>WORLD MODEL</span><b>02</b></div>
-          <h3>Cosmos3-Edge WAM</h3>
-          <p>SO-101 / 3-camera 数据适配、Vision SFT 与 Action-policy WAM；在 1×H100 上完成 held-out 多时长评测。</p>
-          <div class="metric-line"><strong>1 / 3 / 8s</strong><span>GT · WAM · FD 并排评测</span></div>
-          <div class="cosmos-video-stack" aria-label="Cosmos3-Edge WAM 评测视频">
+          <h3>Cosmos · World Model to Policy</h3>
+          <p>从 Cosmos3-Edge 的视觉与动作预测评测，延伸到 Cosmos-Policy 真机闭环推理，验证从世界模型到机器人执行的完整链路。</p>
+          <div class="metric-line"><strong>EDGE → POLICY</strong><span>offline evaluation · real-robot rollout</span></div>
+          <section class="cosmos-section" aria-labelledby="cosmos-edge-title">
+            <div class="cosmos-section-head">
+              <span>01 / WORLD MODEL</span>
+              <b id="cosmos-edge-title">Cosmos3-Edge · WAM Evaluation</b>
+            </div>
+            <div class="cosmos-video-stack" aria-label="Cosmos3-Edge WAM 评测视频">
+              <figure>
+                <video controls playsinline preload="metadata" poster="assets/posters/cosmos-vision-pred-vs-gt.jpg">
+                  <source src="../media/cosmos-vision-pred-vs-gt-2s.mp4" type="video/mp4">
+                </video>
+                <figcaption><b>Vision I2V</b><span>PRED | GT · held-out ep111</span></figcaption>
+              </figure>
+              <figure>
+                <video controls playsinline preload="metadata" poster="assets/posters/cosmos-action-gt-wam-fd.jpg">
+                  <source src="../media/cosmos-action-gt-wam-fd-3s.mp4" type="video/mp4">
+                </video>
+                <figcaption><b>Action WAM</b><span>GT | WAM | FD · 3s</span></figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="cosmos-section cosmos-policy" aria-labelledby="cosmos-policy-title">
+            <div class="cosmos-section-head">
+              <span>02 / REAL ROBOT</span>
+              <b id="cosmos-policy-title">Cosmos-Policy · Closed-loop Rollout</b>
+            </div>
             <figure>
-              <video controls playsinline preload="metadata" poster="assets/posters/cosmos-vision-pred-vs-gt.jpg">
-                <source src="../media/cosmos-vision-pred-vs-gt-2s.mp4" type="video/mp4">
-              </video>
-              <figcaption><b>Vision I2V</b><span>PRED | GT · held-out ep111</span></figcaption>
+              <div class="cosmos-policy-video">
+                <video controls playsinline preload="metadata" poster="assets/posters/cosmos-policy-real-robot-b601.jpg" aria-label="Cosmos-Policy 真机闭环推理演示">
+                  <source src="../media/cosmos-policy-real-robot-b601.mp4" type="video/mp4">
+                </video>
+                <span><i></i>POLICY INFERENCE</span>
+              </div>
+              <figcaption><b>Real-robot inference</b><span>SO-101 · closed-loop execution · b601</span></figcaption>
             </figure>
-            <figure>
-              <video controls playsinline preload="metadata" poster="assets/posters/cosmos-action-gt-wam-fd.jpg">
-                <source src="../media/cosmos-action-gt-wam-fd-3s.mp4" type="video/mp4">
-              </video>
-              <figcaption><b>Action-policy</b><span>GT | WAM | FD · 3s</span></figcaption>
-            </figure>
-          </div>
+          </section>
           <div class="cosmos-card-footer">
-            <div class="chip-row"><span>Vision SFT</span><span>I2V</span><span>H100</span></div>
+            <div class="chip-row"><span>Vision SFT</span><span>Action WAM</span><span>Real Robot</span><span>H100</span></div>
             <div class="card-links"><a href="https://github.com/upnana/cosmos-edge-lab" target="_blank" rel="noreferrer">项目详情 ↗</a></div>
           </div>
         </article>
@@ -307,7 +328,7 @@
           <div class="model-list">
             <div><b>SmolVLA</b><span>叠方块 / 叠碗 / 双臂交接 / 抓取</span></div>
             <div><b>π0 / π0.5</b><span>2×3090 与 H100 训练 · 3-camera 对照</span></div>
-            <div><b>Cosmos3-Edge</b><span>Vision SFT · Action-policy WAM</span></div>
+            <div><b>Cosmos Edge + Policy</b><span>Vision SFT · Action WAM · 真机闭环推理</span></div>
             <div><b>Evo-RL / ACP</b><span>Value v1–v3 · 真机 RL 迭代闭环</span></div>
             <div><b>GRPO / VLM</b><span>ChartQA 0.026 → 0.864</span></div>
           </div>
